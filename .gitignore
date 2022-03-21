@@ -1,1 +1,7 @@
 data/football
+**/*.DS_Store
+**/*_reviews.json
+**/*headlines.csv
+**/examiner-date-text.csv
+**/*headlines.json
+**/*_5.json
