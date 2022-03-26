@@ -1,8 +1,11 @@
 data/football
 **/*.DS_Store
-**/*_reviews.json
+data/*_reviews.json
 **/*headlines.csv
 **/examiner-date-text.csv
 **/*headlines.json
 **/*_5.json
 data/mafia
+data/yelp_dataset
+output/automotive_reviews.json
+output/phone_reviews.json
