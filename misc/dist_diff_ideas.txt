@@ -1,0 +1,123 @@
+Sources/inspiration:
+https://towardsdatascience.com/natural-language-processing-social-sciences-94a35a8a7c78
+https://econnlpcourse.github.io/course-materials/
+https://www.llrx.com/2015/06/the-case-for-natural-language-processing-in-economics/
+
+Ideas (categorized by "theme", ideas without datasets marked):
+
+## Deception
+Explain differences in transcript when someone is lying. Example hypotheses:
+- "uses short words"
+- "uses lots of qualifiers" ("like", "probably", "maybe")
+
+Example datasets/applications:
+- The Columbia SRI Colorado Deception Corpus: https://catalog.ldc.upenn.edu/LDC2013S09
+- Labeled transcripts from the game show, diplomacy: https://go.umd.edu/diplomacy_data
+- Tuin and Rooijackers (2021) - Labeled transcripts from Among Us gameplay: https://ieee-cog.org/2021/assets/papers/paper_249.pdf
+- Bachenko et al. (2008) - Civil and criminal interview transcripts: https://aclanthology.org/C08-1006.pdf
+- Newman et al. (2003) - https://journals.sagepub.com/doi/10.1177/0146167203029005010
+
+## Gender/racial biases
+Explain differences in descriptions of different racial groups or genders. Example hypotheses:
+- Uses more negative terms.
+- Is more paternalistic.
+- Describes someone as dangerous.
+
+Example datasets/applications:
+- Merullo et al. (2019) - racism in football commentary: https://arxiv.org/pdf/1909.03343.pdf
+- Rice et al. (2019) - racism in judicial opinions: https://journals.sagepub.com/doi/full/10.1177/2053168019848930
+- Cai et al. (2021) - gender bias in judicial rulings: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3869294
+- Gendered language in ratemyprofessor reviews: http://benschmidt.org/profGender
+
+## Cross-time analysis
+Identifies changes in discussions over time. Example hypotheses:
+- "talks about COVID"
+- "talks about Trump"
+
+Example datasets/applications:
+- Dzogang et al. (2017) - differences in news coverage over time: https://datadryad.org/resource/doi:10.5061/dryad.nh775
+
+## Political
+Features of the political process. Example hypotheses:
+- "uses politically neutral language"
+- "uses more negative terms"
+
+Example datasets/applications:
+- Yano et al. (2015) - which bills are likely to survive: www.cs.cmu.edu/~nasmith/papers/yano+smith+wilkerson.naacl12.pdf
+- Differences in how left/right articles speak: https://www.crowdflower.com/data-for-everyone/
+- Demzsky et al. (2019) - Differences in Twitter commentary: https://nlp.stanford.edu/pubs/demszky2019analyzing.pdf
+
+## Business
+Explaining financial movements via consumer sentiment. Example hypotheses:
+- "less confident"
+- "talks about COVID"
+- "talks about Ukraine"
+
+Example datasets/applications:
+- Brown (2012) - Twitter sentiment during bull vs. bear markets: https://www.researchgate.net/publication/271702125_Bulls_Bearsand_Birds_Studying_the_Correlation_between_Twitter_Sentiment_and_the_SP500
+- Jiazheng et al. (2020) - earnings conference call dataset: https://dl.acm.org/doi/10.1145/3340531.3412879
+
+## Interpersonal
+Explain differences in individual conversations. Example hypotheses:
+- "is hostile"
+- "is sarcastic"
+
+Example datasets/applications:
+- Price et al. (2020) - annotated conversation styles: https://aclanthology.org/2020.alw-1.15.pdf
+- Chakravarthula et al. (2018) - couples in therapy, with annotations on outcomes: https://arxiv.org/abs/1805.09436
+- Hate speech classification: https://github.com/t-davidson/hate-speech-and-offensive-language
+- Jia (2020) - Annotated call center transcripts: https://aclanthology.org/2020.ecnlp-1.4.pdf
+
+## Consumer segmentation
+Identifies differences in text features between consumer segments. Example hypotheses:
+- "enjoys the premium features"
+- "likes the flexibility"
+- "wants more options"
+- "wants cheaper pricing"
+
+Example datasets/applications:
+- Pitt et al. (2020) - exploring differences between consumer segments via text: https://www.diva-portal.org/smash/get/diva2:1399516/FULLTEXT01.pdf
+
+## Learning/feedback
+What's the difference between a good and bad essay? A good or bad interview? Example hypotheses:
+- "uses longer words"
+- "talks more about concepts"
+
+Example datasets/applications:
+- The Hewlett Foundation: Automated Essay Scoring: https://www.kaggle.com/c/asap-aes
+- Mathias and Bhattacharyya (2018) - enriched essay grade dataset: https://www.cse.iitb.ac.in/~sam/papers/SAM-LREC-2018-ASAP++.pdf
+- MIT Interview Datset: https://roc-hci.com/past-projects/automated-prediction-of-job-interview-performances/
+
+## Search tools
+How does one subject/article differ from another? Example hypotheses:
+- "talks more about finance than economics"
+- "is more technical"
+- "discusses transfer learning"
+
+Example datasets/applications:
+- Kwary (2018) - academic journal articles: https://www.sciencedirect.com/science/article/pii/S2352340917306194
+- Murakami (2017) - journal articles labeled by topic: https://www.euppublishing.com/doi/full/10.3366/cor.2017.0118?src=recsys
+
+
+## Popularity
+What are popular movies/bloggers/writers doing differently?
+- "has more characters"
+- "stays on topic"
+- "has more references"
+
+Example datasets/applications:
+- Cornell Movie Dialogue Corpus: http://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html
+- Blog authorship corpus: https://www.kaggle.com/rtatman/blog-authorship-corpus/activity
+- Good vs bad wikipedia writing: https://www.tensorflow.org/datasets/catalog/wikipedia
+
+## Model Performance
+Assist researchers with explaining why models perform worse on some data.
+- "asks about personal details"
+- "looking for beauty products"
+- "asks for personal advice"
+- "asks multiple questions"
+
+Example datasets/applications:
+- Which types of questions does the Watson/Jeopardy bot (or other Q/A bots) get wrong?
+- Why are some search results worse?: https://www.kaggle.com/c/home-depot-product-search-relevance/data
+- Chatbot failures - on which queries does Siri/Alexa/etc. perform the worst?: http://alumni.soe.ucsc.edu/~waiting/umpublished/Exploring%20the%20effect%20of%20dataset%20on%20chatbot%20performance.pdf
