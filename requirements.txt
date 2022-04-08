@@ -1,1 +1,5 @@
 pandas
+gdown
+scipy
+numpy
+gdown
