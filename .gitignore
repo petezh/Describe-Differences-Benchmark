@@ -10,3 +10,4 @@ data/yelp_dataset
 output/automotive_reviews.json
 output/phone_reviews.json
 data/parenting/labeled_posts.csv
+data/covid_tweets/training.csv
