@@ -3,7 +3,7 @@ data/football
 data/*_reviews.json
 **/*headlines.csv
 **/examiner-date-text.csv
-**/*headlines.json
+data/**/*headlines.json
 **/*_5.json
 data/mafia
 data/yelp_dataset
