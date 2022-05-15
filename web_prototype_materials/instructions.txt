@@ -1,0 +1,20 @@
+Thank you for participating in this survey! This study is interested in discerning the differences in two distributions of text. Specifically, we hope to determine a hypothesis, in everyday language, about what that differences might be between two groups of sentences. For example, two distributions of text may be a collection of "spam" emails and a collection of "ham" emails. After reviewing some examples of spam and ham emails, a hypothesis you might have is that spam emails "offer the sale of some good."
+
+An ideal hypothesis is convincing to an outside verifier. Your goal should be to craft a hypothesis that someone else, looking at the same sentences, might agree with. This imposes a couple constraints on the hypotheses that you can propose: correctness, clarity, and format.
+
+Most importantly, your hypothesis must correctly identify an insightful difference between the two distributions. Sometimes, being insightful means that the hypothesis cannot be obvious. For example, a hypothesis such as "are spam emails" may be trivially true, but aren't insightful. When such a constraint is relevant, we will provide relevant background information to help you avoid trivial hypotheses.
+
+Hypotheses must also be clear. Here are some guidelines for writing unambiguous hypotheses:
+- Avoid reliance on expert knowledge (e.g. "contains corrupted HTML") and cultural references (e.g. "from Enron employees"). Where knowledge of details is required, please provide the information as relevant.
+- Avoid analogies (e.g. "reads like garbage"), favoring direct descriptions (e.g. "contains grammatical errors").
+- Be specific as much as possible without compromising the plausible of the hypothesis (e.g. instead of "has different sentence length," "tends to be much longer in length").
+- Avoid subjective judgements, which depend on your opinion (e.g. "seems to be fairly nice," "is not very funny," "is probably a male")
+- Prefer positive wordings over negative wordings. Instead of hypothesizing that sentence A "does not talk about money," offer that sentence B "mentions money."
+
+Finally, make sure that hypothesis adhere to correct formatting. This survey supports two kinds of hypotheses:
+Comparison: Is it true that compared to sentence B, sentence A [your hypothesis] (e.g., is longer. ) 
+Individual: Is it true that this sentence [your hypothesis] (e.g., is sports-related.)
+
+For example, “this sentence is longer” does not make sense, since comparison requires two sentences. 
+
+We will now go through a questionnaire that will test your understanding of these instructions.
