@@ -9,6 +9,8 @@ import gdown
 import zipfile
 from os.path import join
 import os
+import shutil
+from tqdm import tqdm
 
 import requests
 import tarfile
@@ -16,7 +18,7 @@ from io import BytesIO
 import gender_guesser.detector as gender
 
 DOWNLOAD_FOLDER = 'source'
-OUTPUT_FOLDER = 'output'
+OUTPUT_FOLDER = 'new_output'
 
 """
 **********
@@ -92,7 +94,7 @@ def prepare_trial_deception():
     directory = f'{DOWNLOAD_FOLDER}/{NAME}'
     download_zip(URL, directory)
 
-    files = glob.glob(f'{directory}/RealLifeDeception/Transcription/**/*.txt')
+    files = glob.glob(f'{directory}/Real-life_Deception_Detection_2016/Transcription/**/*.txt')
     truth, lie = [], []
     for file in files:
         with open(file, 'r') as f:
@@ -545,24 +547,35 @@ Driver
 ******
 """
 
+preparers = {
+    'open_deception':prepare_open_deception,
+    'fake_news':prepare_fake_news,
+    'trial_deception':prepare_trial_deception,
+    'parenting_subreddits':prepare_parenting_subreddits,
+    'diplomacy_deception':prepare_diplomacy_deception,
+    'abc_headlines':prepare_abc_headlines,
+    'times_india_headlines':prepare_times_india_headlines,
+    'clickbait_headlines':prepare_clickbait_headlines,
+    'stock_news':prepare_stock_news,
+    'unhealthy_conversations':prepare_unhealthy_conversations,
+    'reuters_authorship':prepare_reuters_authorship,
+    'twitter_mispellings':prepare_twitter_mispellings,
+    'reddit_humor':prepare_reddit_humor,
+    'echr_decisions':prepare_echr_decisions,
+    'news_popularity':prepare_news_popularity,
+    'convincing_arguments':prepare_convincing_arguments,
+    'rate_my_prof':prepare_rate_my_prof,
+}
+
 def main():
-    # prepare_open_deception()
-    # prepare_fake_news()
-    # prepare_trial_deception()
-    # prepare_rate_my_prof()
-    # prepare_parenting_subreddits()
-    # prepare_diplomacy_deception()
-    # prepare_abc_headlines()
-    # prepare_times_india_headlines()
-    # prepare_clickbait_headlines()
-    # prepare_stock_news()
-    # prepare_unhealthy_conversations()
-    # prepare_reuters_authorship()
-    # prepare_twitter_mispellings()
-    # prepare_reddit_humor()
-    # prepare_echr_decisions()
-    # prepare_news_popularity()
-    # prepare_convincing_arguments()
+
+    os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+    pbar = tqdm(preparers.items())
+    for dataset, prepare_func in pbar:
+        pbar.set_description(f'processing {dataset}')
+        prepare_func()
+
     delete_downloads()
 
 """
@@ -631,7 +644,11 @@ def save_json(output, name):
         json.dump(output, outfile)
 
 def delete_downloads():
-    os.remove(DOWNLOAD_FOLDER)
+    """
+    Clears the downloads folder.
+    """
+
+    shutil.rmtree(DOWNLOAD_FOLDER)
 
 if __name__ == '__main__':
     main()
