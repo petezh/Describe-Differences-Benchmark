@@ -1,6 +1,0 @@
-Hi Steve! The `instructions.txt` file includes a starting list of instructions for the user. It puts together all the piece outlined in the [Google Doc](https://docs.google.com/document/d/18lF1_vPVG2wfKW6-da4rdWTo9B_AnppYSn_EIpPcVMc/edit#). The `sentences` folder includes `.txt` files with example pairs of sentences. Some things to know about the latter:
-
-1. It is currently limited to 5 from each distributions. I imagine that this will vary in the future, so it might be worth keeping that generalizable.
-2. They come in both HTML-formatted (which highlights attention) and unformatted forms. Let me know if you would prefer just to have the raw alpha value for each span of words.
-3. If there is relevant information, I left it at the top. These are guiding comments which tell them where the distributions come from, which should *not* be the basis of hypotheses.
-4. Let me know anytime if there is a format for sentence pairs you would prefer over what we have (e.g. JSON). Happy to do whatever is easiest for you.

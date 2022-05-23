@@ -1,1 +1,0 @@
-{"description": "A multimodal dataset consisting of real-life deception: deceptive and truthful trial testimonies, manually transcribed and annotated.", "type": "correlation", "data": {"truth": [], "lie": []}}
