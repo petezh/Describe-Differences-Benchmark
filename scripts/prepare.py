@@ -1,25 +1,17 @@
 from collections import defaultdict
-from io import BytesIO
 import itertools
 import json
 import os
 from os.path import join
 import re
-import requests
-from typing import Dict
 
-import gdown
 import glob
 import numpy as np
 import pandas as pd
-import shutil
 from tqdm import tqdm
-import tarfile
-import zipfile
 
-DOWNLOAD_FOLDER = 'source'
-MANUAL_FOLDER = 'manual'
-OUTPUT_FOLDER = 'output'
+from parameters import *
+from utils import *
 
 """
 **********
@@ -718,6 +710,155 @@ def prepare_npt_conferences():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
+def prepare_twitter_rumors():
+    """
+    Downloads and prepares a dataset of Twitter rumors.
+    """
+
+    NAME = 'tweet_rumor'
+    TYPE = 'correlation'
+    DESC = 'Dataset of rumors over time on various topics.'
+
+    import scrape_twitter_rumors
+
+    data = scrape_twitter_rumors.scrape()
+    
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_armenian_jobs():
+    """
+    Downloads and engineers features for dataset of Armenian job postings.
+    """
+
+    NAME = 'armenian_jobs'
+    TYPE = 'correlation'
+    DESC = 'Dataset of job postings in Armenia by role and year.'
+    URL = 'https://raw.githubusercontent.com/GurpreetKaur28/Analysing-Online-Job-Postings/master/data%20job%20posts.csv'
+    
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    filename = f'{NAME}.tsv'
+    download_file(URL, directory, filename)
+
+    df = pd.read_csv(join(directory, filename))
+
+    data = {}
+
+    jobs = {
+        'sw_dev':'Software Developer',
+        'senior_sw_dev':'Senior Software Developer',
+        'qa_eng':'QA Engineer',
+        'senior_qa_eng':'Senior QA Engineer',
+        'sw_eng':'Software Engineer',
+        'senior_sw_eng':'Senior Software Engineer',
+        'java_dev':'Java Developer',
+        'senior_java_dev':'Senior Java Developer',
+        'prgmr':'programmer',
+    }
+
+    for name, title in jobs.items():
+        descriptions = df[df.Title == title]['JobDescription'].dropna().tolist()
+        requirements =  df[df.Title == title]['JobRequirment'].dropna().tolist()
+        data[f'job_desc_{name}'] = descriptions
+        data[f'job_req_{name}'] = requirements
+
+    year_bins = [(2004, 2007), (2007, 2010), (2010, 2013), (2013, 2015)]
+    for start_year, end_year in year_bins:
+        requirements = df[(start_year <= df.Year) & (df.Year < end_year)]['JobRequirment'].dropna().tolist()
+        app_process = df[(start_year <= df.Year) & (df.Year < end_year)]['ApplicationP'].dropna().tolist()
+        data[f'job_req_years_{start_year}_{end_year}'] = requirements
+        data[f'app_process_years_{start_year}_{end_year}'] = app_process
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_monster_jobs():
+    """
+    Downloads and engineers features for dataset of job postings on Monster.com.
+    """
+
+    NAME = 'monster_jobs'
+    TYPE = 'correlation'
+    DESC = 'Dataset of job postings on monster.com by geography.'
+
+    df = pd.read_csv(join(MANUAL_FOLDER, 'monster_com-job_sample.csv'))
+    
+    locations = {
+        'dallas':'Dallas, TX',
+        'houston':'Houston, TX',
+        'austin':'Austin, TX',
+        'denver':'Denver, CO',
+        'atlanta':'Atlanta, GA',
+        'cincinatti':'Cincinnati, OH',
+        'tampa':'Tampa, FL',
+        'boston':'Boston, MA',
+        'milwaukee':'Milwaukee, WI',
+        'la':'Los Angeles, CA',
+        'sf':'San Francisco, CA',
+        'nashville':'Nashville, TN',
+        'nyc':'New York, NY',
+        'colombus':'Columbus, OH',
+        'seattle':'Seattle, WA',
+        'las_vegas':'Las Vegas, NV',
+        'berkeley':'Berkeley, CA'
+    }
+
+    data = {}
+    for name, loc in locations.items():
+        descriptions = df[df.location.str.contains(loc)].job_description.dropna().tolist()
+        data[name] = descriptions
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+
+def prepare_dice_jobs():
+    """
+    Downloads and engineers features for dataset of job postings on dice.com.
+    """
+
+    NAME = 'dice_jobs'
+    TYPE = 'correlation'
+    DESC = 'Dataset of job postings on dice.com grouped by leading employers.'
+
+    df = pd.read_csv(join(MANUAL_FOLDER, 'Dice_US_jobs.csv'), encoding='latin-1')
+    orgs = {
+        'northup_grumman':'NORTHROP GRUMMAN',
+        'leidos':'Leidos',
+        'dell':'Dell',
+        'delloite':'Delloite',
+        'amazon':'Amazon',
+        'jpm':'JPMorgan Chase'
+    }
+    data = {}
+    for name, org in orgs.items():
+        descriptions = df[df.organization == org].job_description.dropna().tolist()
+        data[name] = descriptions
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_admin_statements():
+    """
+    Downloads and formats dataset of White House administration statements.
+    """
+
+    NAME = 'admin_statements'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes statements of administration policy for three presidents.'
+    URL = 'https://github.com/unitedstates/statements-of-administration-policy/archive/master.zip'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    download_zip(URL, directory)
+    
+    import scrape_admin_statements
+
+    data = scrape_admin_statements.scrape()
+    
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+
 """
 ******
 Driver
@@ -748,13 +889,16 @@ preparers = {
     'short_answer_grading':prepare_short_answer_scoring,
     'tweet_gender':prepare_tweet_gender,
     'npt_conferences':prepare_npt_conferences,
+    'twitter_rumors':prepare_twitter_rumors,
+    'armenian_jobs':prepare_armenian_jobs,
+    'monster_jobs':prepare_monster_jobs,
+    'dice_jobs':prepare_dice_jobs,
+    'admin_statements':prepare_admin_statements,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-    prepare_npt_conferences()
 
     if False:
         pbar = tqdm(preparers.items())
@@ -763,84 +907,6 @@ def main():
             prepare_func()
 
         delete_downloads()
-
-"""
-*********
-Utilities
-*********
-"""
-
-def download_zip(url: str, directory: str):
-    """
-    Downloads and extracts contents of a zip folder.
-    """
-
-    req = requests.get(url)
-    zip = zipfile.ZipFile(BytesIO(req.content))
-    zip.extractall(directory)
-
-def download_tar(url: str, directory: str):
-    """
-    Downloads and extracts contents of a tar file.
-    """
-
-    response = requests.get(url, stream=True)
-    file = tarfile.open(fileobj=response.raw, mode="r|gz")
-    file.extractall(path=directory)
-
-def download_file(url: str, directory: str, filename: str):
-    """
-    Downloads and names file.
-    """
-    req = requests.get(url)
-    os.makedirs(directory, exist_ok=True)
-    with open(join(directory, filename), 'wb') as f:
-        f.write(req.content)
-
-def download_drive_zip(id: str, directory: str):
-    """
-    Downloads files from Google Drive.
-    """
-
-    url = f'https://drive.google.com/uc?id={id}'
-    os.makedirs(directory, exist_ok=True)
-    gdown.download(url, join(directory, 'drive.zip'))
-    with zipfile.ZipFile(join(directory, 'drive.zip'), 'r') as zip_ref:
-        zip_ref.extractall(directory)
-
-def format_data(data: Dict, type: str, desc: str) -> Dict:
-    """
-    Formats dataset with type and descripiton to a final output.
-    """
-
-    output = {
-        'description':desc,
-        'type':type,
-        'data':data,
-    }
-    return output
-
-def save_json(output: Dict, name: str):
-    """
-    Saves output data to output folder.
-    """
-
-    output_file = f'{OUTPUT_FOLDER}/{name}.json'
-    with open(output_file, 'w') as outfile:
-        json.dump(output, outfile)
-
-def delete_downloads():
-    """
-    Clears the downloads folder.
-    """
-
-    shutil.rmtree(DOWNLOAD_FOLDER)
-
-def clean_text(text):
-    """
-    Repalces common unicode characters.
-    """
-    return text.encode("ascii", "ignore").decode()
 
 if __name__ == '__main__':
     main()
