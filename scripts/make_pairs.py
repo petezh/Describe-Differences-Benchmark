@@ -46,6 +46,26 @@ def pair_abc_headlines_2019_2020():
     
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
+def pair_ad_transcripts_automative_travel():
+    """Ad transcripts for automobile and travel companies."""
+
+    DATASET = 'ad_transcripts'
+    POS = ['Automotive']
+    NEG = ['Travel']
+    ANNOTATIONS = ['talks more about performance','talks more about family']
+    
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_ad_transcripts_beauty_care():
+    """Ad transcripts for beauty products and personal care products."""
+
+    DATASET = 'ad_transcripts'
+    POS = ['Beauty']
+    NEG = ['Home & Personal Care']
+    ANNOTATIONS = ['talks more about seeing','talks more about fashion']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def pair_admin_statements_obama_biden():
     """Administration statements from Obama and Biden."""
 
@@ -234,6 +254,66 @@ def pair_fake_news_fake_legit():
     NEG = ['legit']
     ANNOTATIONS = ['uses more extreme language','cites fewer sources','is more political']
 
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_greenspan_bernanke():
+    """FOMC speeches from Chariman Greenspan and Chairman Bernanke."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['greenspan_speeches']
+    NEG = ['bernanke_speeches']
+    ANNOTATIONS = ['calls for more action','talks more about growth','talks less about targets']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_greenspan_bernanke_years():
+    """FOMC speeches from the terms of Chariman Greenspan (-2006) and Chairman Bernanke (2006-2014)."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['greenspan_years']
+    NEG = ['bernanke_years']
+    ANNOTATIONS = ['calls for more action','talks more about growth','talks less about targets']
+    
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_yellen_powell_years():
+    """FOMC speeches from the terms of Chariman Yellen (2014-2018) and Chairman Powell (2018-)."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['yellen_years']
+    NEG = ['powell_years']
+    ANNOTATIONS = ['talks more about unemployment','does not mention COVID-19','talks about economic growth']
+    
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_unemployment():
+    """FOMC speeches during periods of high and low unemployment."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['high_unemp']
+    NEG = ['low_unemp']
+    ANNOTATIONS = ['talks more about unemployment','talks about lowering the interest rate','talks less about inflation']
+    
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_growth():
+    """FOMC speeches during periods of high and low GDP growth."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['high_growth']
+    NEG = ['low_growth']
+    ANNOTATIONS = ['talks more about inflation','is more optimistic']
+    
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_fomc_speeches_interest_rate():
+    """FOMC speeches during periods of high and low fed interest rate."""
+
+    DATASET = 'fomc_speeches'
+    POS = ['high_ir']
+    NEG = ['low_ir']
+    ANNOTATIONS = ['talks more about inflation','worries more about recession']
+    
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def pair_microedit_humor_unfunny_funny():
@@ -541,66 +621,208 @@ def pair_reuters_authorship_janlopatka_john_mastrini():
 def pair_short_answer_scoring_good_bad():
     """Short answer responses with good versus (2.5+/3) bad scores (1/3)."""
 
+    DATASET = 'short_answer_scoring'
+    POS = ["good_answers"]
+    NEG = ['bad_answers']
+    ANNOTATIONS = ['uses correct grammar','gives more detail','is longer']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def pair_short_answer_scoring_good_medium():
     """Short answer responses with good (2.5+/3) versus medium scores (1.5-2/3)."""
+
+    DATASET = 'short_answer_scoring'
+    POS = ["good_answers"]
+    NEG = ['medium_answers']
+    ANNOTATIONS = ['gives more examples','is longer']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def pair_stock_news_up_down():
     """Reddit news headlines linked with whether the stock market went up or down that day."""
 
+    DATASET = 'stock_news'
+    POS = ["up"]
+    NEG = ['down']
+    ANNOTATIONS = ['talks about good news','talks about economic growth','more optimistic']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def pair_suicide_notes_suicide_depression():
     """Reddit posts from depression vs. suicide related subreddits."""
+
+    DATASET = 'suicide_notes'
+    POS = ['suicide']
+    NEG = ['depression']
+    ANNOTATIONS = ['is more apologetic','mentions family and friends','is longer','uses better grammar']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def pair_times_india_headlines_2003_2004():
     """Times of India news headlines from 2003 and 2004."""
 
+    DATASET = 'times_india_headlines'
+    POS = ['2003']
+    NEG = ['2004']
+    ANNOTATIONS = ['talks more about iraq','mentions train crashes','talks about Nadimarg massacre']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def pair_times_india_headlines_2007_2008():
     """Times of India news headlines from 2007 and 2008."""
+
+    DATASET = 'times_india_headlines'
+    POS = ['2007']
+    NEG = ['2008']
+    ANNOTATIONS = ['talks less about the economy','is more optimistic']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def pair_times_india_headlines_2019_2020():
     """Times of India news headlines from 2019 and 2020."""
 
+    DATASET = 'times_india_headlines'
+    POS = ['2019']
+    NEG = ['2020']
+    ANNOTATIONS = ['does not mention COVID-19','is more optimistic']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def trial_deception_truth_lie():
     """Truths and lies told during real life trials."""
+
+    DATASET = 'trial_deception'
+    POS = ['truth']
+    NEG = ['lie']
+    ANNOTATIONS = ['admits to not knowing','does not claim innocence','longer sentences','expresses more uncertainty']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def tweet_gender_male_female():
     """Tweets from male versus female Twitter users."""
 
+    DATASET = 'tweet_gender'
+    POS = ['male_tweets']
+    NEG = ['female_tweets']
+    ANNOTATIONS = ['talks more about sports','talks more about politics','talks more about men']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def tweet_rumor_redhawks_early_late():
     """Early and late Twitter rumors about the 'Redhawks' name change."""
+
+    DATASET = 'tweet_rumor'
+    POS = ['redhawks_early']
+    NEG = ['redhawks_late']
+    ANNOTATIONS = ['is less skeptical','expresses more surprise']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def tweet_rumor_zucc_early_late():
     """Early and late Twitter rumors about Zuckerberg buying a yatch."""
 
+    DATASET = 'tweet_rumor'
+    POS = ['zuckerberg_yatch_early']
+    NEG = ['zuckerberg_yatch_late']
+    ANNOTATIONS = ['is less skeptical','expresses more surprise']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def tweet_rumor_denzel_wash_early_late():
     """Early and late Twitter rumors about Denzel Washington praising Trump."""
+
+    DATASET = 'tweet_rumor'
+    POS = ['denzel_washington_early']
+    NEG = ['denzel_washington_late']
+    ANNOTATIONS = ['is less skeptical','expresses more surprise']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def tweet_rumor_veggietales_early_late():
     """Early and late Twitter rumors about a new Veggietales cannabis character."""
 
-def twitter_mispellings_your_ur():
+    DATASET = 'tweet_rumor'
+    POS = ['veggietales_early']
+    NEG = ['veggietales_late']
+    ANNOTATIONS = ['is less skeptical','expresses more surprise']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def twitter_misspellings_your_ur():
     """Tweets with and without an abbreviation of 'your' to 'ur'"""
 
-def twitter_mispellings_with_wit():
+    DATASET = 'twitter_misspellings'
+    POS = ['your_misspell']
+    NEG = ['your_proper']
+    ANNOTATIONS = ['is part of a conversation','is more friendly']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def twitter_misspellings_with_wit():
     """Tweets with and without an abbreviation of 'with' to 'wit'"""
 
-def twitter_mispellings_that_dat():
+    DATASET = 'twitter_misspellings'
+    POS = ['with_misspell']
+    NEG = ['with_proper']
+    ANNOTATIONS = ['is part of a conversation','is more friendly']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def twitter_misspellings_that_dat():
     """Tweets with and without an abbreviation of 'that' to 'dat'"""
 
-def twitter_mispellings_going_goin():
+    DATASET = 'twitter_misspellings'
+    POS = ['that_misspell']
+    NEG = ['that_proper']
+    ANNOTATIONS = ['is part of a conversation','is more friendly']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def twitter_misspellings_going_goin():
     """Tweets with and without an abbreviation of 'going' to 'goin'"""
+
+    DATASET = 'twitter_misspellings'
+    POS = ['going_misspell']
+    NEG = ['going_proper']
+    ANNOTATIONS = ['is part of a conversation','is more friendly']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def unhealthy_conversations_dismissive_condescending():
     """Unhealthy conversations characterized as dismissive vs. condescending."""
 
+    DATASET = 'unhealthy_conversations'
+    POS = ['dismissive']
+    NEG = ['condescending']
+    ANNOTATIONS = ['is not insulting','is shorter']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def unhealthy_conversations_generalisation_unfair():
     """Unhealthy conversations characterized as generalisation (not unfair) vs. generalisation unfair."""
+
+    DATASET = 'unhealthy_conversations'
+    POS = ['generalisation']
+    NEG = ['generalisation_unfair']
+    ANNOTATIONS = ['is more objective','provides more reasoning']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
 def unhealthy_conversations_hostile_antagonize():
     """Unhealthy conversations characterized as hostlie vs. antagonizing."""
 
+    DATASET = 'unhealthy_conversations'
+    POS = ['hostile']
+    NEG = ['antagonize']
+    ANNOTATIONS = ['is less insulting','uses more curse words']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 constructors = [
     pair_abc_headlines_2007_2008,
     pair_abc_headlines_2019_2020,
+    pair_ad_transcripts_automative_travel,
+    pair_ad_transcripts_beauty_care,
     pair_admin_statements_obama_biden,
     pair_admin_statements_trump_biden,
     pair_armenian_jobs_sw_qa,
@@ -620,6 +842,12 @@ constructors = [
     pair_echr_decisions_yes_no_violation,
     pair_essay_scoring_good_bad,
     pair_fake_news_fake_legit,
+    pair_fomc_speeches_greenspan_bernanke,
+    pair_fomc_speeches_greenspan_bernanke_years,
+    pair_fomc_speeches_yellen_powell_years,
+    pair_fomc_speeches_unemployment,
+    pair_fomc_speeches_growth,
+    pair_fomc_speeches_interest_rate,
     pair_microedit_humor_unfunny_funny,
     pair_microedit_humor_funny_very_funny,
     pair_monster_jobs_atl_tampa,
@@ -663,10 +891,10 @@ constructors = [
     tweet_rumor_zucc_early_late,
     tweet_rumor_denzel_wash_early_late,
     tweet_rumor_veggietales_early_late,
-    twitter_mispellings_your_ur,
-    twitter_mispellings_with_wit,
-    twitter_mispellings_that_dat,
-    twitter_mispellings_going_goin,
+    twitter_misspellings_your_ur,
+    twitter_misspellings_with_wit,
+    twitter_misspellings_that_dat,
+    twitter_misspellings_going_goin,
     unhealthy_conversations_dismissive_condescending,
     unhealthy_conversations_generalisation_unfair,
     unhealthy_conversations_hostile_antagonize,
@@ -677,7 +905,7 @@ def main():
     # pbar = tqdm(enumerate(constructors[:13]))
     pairs = []
 
-    for i, constructor in enumerate(constructors[:50]):
+    for i, constructor in enumerate(constructors):
         # pbar.set_description(f'processing pair {i}')
         new_pair = constructor()
         print('---')

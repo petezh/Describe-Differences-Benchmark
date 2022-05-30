@@ -21,9 +21,7 @@ Preparers
 """
 
 def prepare_open_deception():
-    """
-    Downloads and formats the Open Deception dataset.
-    """
+    """Downloads and formats the Open Deception dataset."""
     
     NAME = 'open_deception'
     TYPE = 'correlation'
@@ -45,9 +43,7 @@ def prepare_open_deception():
     save_json(output, NAME)
 
 def prepare_fake_news():
-    """
-    Downloads and formats the Fake News dataset.
-    """
+    """Downloads and formats the Fake News dataset."""
     
     NAME = 'fake_news'
     TYPE = 'correlation'
@@ -76,9 +72,7 @@ def prepare_fake_news():
     save_json(output, NAME)
 
 def prepare_trial_deception():
-    """
-    Downloads and formats the Real-life Deception dataset.
-    """
+    """Downloads and formats the Real-life Deception dataset."""
 
     NAME = 'trial_deception'
     TYPE = 'correlation'
@@ -107,9 +101,7 @@ def prepare_trial_deception():
     save_json(output, NAME)
 
 def prepare_rate_my_prof():
-    """
-    Downloads and formats Rate My Professor dataset.
-    """
+    """Downloads and formats Rate My Professor dataset."""
 
     NAME = 'rate_my_prof'
     TYPE = 'correlation'
@@ -144,9 +136,7 @@ def prepare_rate_my_prof():
     save_json(output, NAME)
 
 def prepare_parenting_subreddits():
-    """
-    Downloads and formats parenting discussion threads on Reddit.
-    """
+    """Downloads and formats parenting discussion threads on Reddit."""
 
     NAME = 'parenting_subreddits'
     TYPE = 'correlation'
@@ -172,9 +162,7 @@ def prepare_parenting_subreddits():
     save_json(output, NAME)
 
 def prepare_diplomacy_deception():
-    """
-    Downloads and formats deception data from rounds of the game, Diplomacy.
-    """
+    """Downloads and formats deception data from rounds of the game, Diplomacy."""
 
     NAME = 'diplomacy_deception'
     TYPE = 'correlation'
@@ -206,9 +194,7 @@ def prepare_diplomacy_deception():
     save_json(output, NAME)
 
 def prepare_abc_headlines():
-    """
-    Downloads and formats a million headlines from ABC news.
-    """
+    """Downloads and formats a million headlines from ABC news."""
 
     NAME = 'abc_headlines'
     TYPE = 'correlation'
@@ -230,9 +216,7 @@ def prepare_abc_headlines():
     save_json(output, NAME)
 
 def prepare_times_india_headlines():
-    """
-    Downloads and formats a million headlines from Times of India news.
-    """
+    """Downloads and formats a million headlines from Times of India news."""
 
     NAME = 'times_india_headlines'
     TYPE = 'correlation'
@@ -254,9 +238,7 @@ def prepare_times_india_headlines():
     save_json(output, NAME)
 
 def prepare_clickbait_headlines():
-    """
-    Downloads and formats a million headlines from The Examiner, a clickbait news site.
-    """
+    """Downloads and formats a million headlines from The Examiner, a clickbait news site."""
 
     NAME = 'clickbait_headlines'
     TYPE = 'correlation'
@@ -278,9 +260,7 @@ def prepare_clickbait_headlines():
     save_json(output, NAME)
 
 def prepare_stock_news():
-    """
-    Downloads and formats a million headlines from The Examiner, a clickbait news site.
-    """
+    """Downloads and formats a million headlines from The Examiner, a clickbait news site."""
 
     NAME = 'stock_news'
     TYPE = 'causation'
@@ -304,9 +284,7 @@ def prepare_stock_news():
     save_json(output, NAME)
 
 def prepare_unhealthy_conversations():
-    """
-    Downloads and formats data on unhealthy conversations.
-    """
+    """Downloads and formats data on unhealthy conversations."""
 
     NAME = 'unhealthy_conversations'
     TYPE = 'correlation'
@@ -334,9 +312,7 @@ def prepare_unhealthy_conversations():
     save_json(output, NAME)
 
 def prepare_reuters_authorship():
-    """
-    Downloads and formats data on Reuters authors.
-    """
+    """Downloads and formats data on Reuters authors."""
 
     NAME = 'reuters_authorship'
     TYPE = 'correlation'
@@ -357,14 +333,12 @@ def prepare_reuters_authorship():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
-def prepare_twitter_mispellings():
-    """
-    Downloads and formats dataset of Tweets with and without mispellings.
-    """
+def prepare_twitter_misspellings():
+    """Downloads and formats dataset of Tweets with and without misspellings."""
     
-    NAME = 'twitter_mispellings'
+    NAME = 'twitter_misspellings'
     TYPE = 'correlation'
-    DESC = 'Dataset includes tweets with and without certain mispellings.'
+    DESC = 'Dataset includes tweets with and without certain misspellings.'
     ID = '0B04GJPshIjmPRnZManQwWEdTZjg'
 
     directory = f'{DOWNLOAD_FOLDER}/{NAME}'
@@ -393,9 +367,7 @@ def prepare_twitter_mispellings():
     save_json(output, NAME)
 
 def prepare_reddit_humor():
-    """
-    Downloads and formats dataset of jokes on Reddit.
-    """
+    """Downloads and formats dataset of jokes on Reddit."""
 
     NAME = 'reddit_humor'
     TYPE = 'correlation'
@@ -426,9 +398,7 @@ def prepare_reddit_humor():
     save_json(output, NAME)
     
 def prepare_echr_decisions():
-    """
-    Downloads and formats dataset of decisions from the European Court of Human Rights (ECHR).
-    """
+    """Downloads and formats dataset of decisions from the European Court of Human Rights (ECHR)."""
 
     NAME = 'echr_decisions'
     TYPE = 'causation'
@@ -439,10 +409,12 @@ def prepare_echr_decisions():
     download_zip(URL, directory)
     
     path = f'{directory}/*_Anon/*.json'
-    files = glob.glob(path)
-    dicts = [json.load(open(f, 'r')) for f in files]
 
     np.random.seed(0)
+    files = np.random.choice(glob.glob(path), 500, replace=False)
+    dicts = [json.load(open(f, 'r')) for f in files]
+
+    
     data = defaultdict(list)
     for d in dicts:
         text = list(d['TEXT'])
@@ -455,9 +427,7 @@ def prepare_echr_decisions():
     save_json(output, NAME)
 
 def prepare_news_popularity():
-    """
-    Downloads and formats dataset of news headlines and popularity.
-    """
+    """Downloads and formats dataset of news headlines and popularity."""
 
     NAME = 'news_popularity'
     TYPE = 'causation'
@@ -504,9 +474,7 @@ def prepare_news_popularity():
     save_json(output, NAME)
 
 def prepare_convincing_arguments():
-    """
-    Downloads and formats dataset of arguments and their ranked convincingness.
-    """
+    """Downloads and formats dataset of arguments and their ranked convincingness."""
 
     NAME = 'convincing_arguments'
     TYPE = 'causation'
@@ -551,9 +519,7 @@ def prepare_convincing_arguments():
     save_json(output, NAME)
 
 def prepare_microedit_humor():
-    """
-    Downloads and formats dataset of funny statements generated by one-word substitutions.
-    """
+    """Downloads and formats dataset of funny statements generated by one-word substitutions."""
 
     NAME = 'microedit_humor'
     TYPE = 'causation'
@@ -586,9 +552,7 @@ def prepare_microedit_humor():
     save_json(output, NAME)
 
 def prepare_open_review():
-    """
-    Scrapes and formats dataset of Open Review papers from ICLR 2018-2021.
-    """
+    """Scrapes and formats dataset of Open Review papers from ICLR 2018-2021."""
     NAME = 'open_review'
     TYPE = 'causation'
     DESC = 'Dataset of ICLR submissions from 2018 and 2021 split on whether they recieved an average rating greater than 5.'
@@ -606,9 +570,7 @@ def prepare_open_review():
     save_json(output, NAME)
 
 def prepare_essay_scoring():
-    """
-    Scrapes and formats essay scoring dataset.
-    """
+    """Scrapes and formats essay scoring dataset."""
 
     NAME = 'essay_scoring'
     TYPE = 'causation'
@@ -633,9 +595,7 @@ def prepare_essay_scoring():
     save_json(output, NAME)
 
 def prepare_short_answer_scoring():
-    """
-    Scrapes and formats short answer scoring dataset.
-    """
+    """Scrapes and formats short answer scoring dataset."""
 
     NAME = 'short_answer_scoring'
     TYPE = 'causation'
@@ -663,9 +623,7 @@ def prepare_short_answer_scoring():
     save_json(output, NAME)
 
 def prepare_tweet_gender():
-    """
-    Downloads and formats a dataset on Twitter user gender.
-    """
+    """Downloads and formats a dataset on Twitter user gender."""
 
     NAME = 'tweet_gender'
     TYPE = 'correlation'
@@ -691,9 +649,7 @@ def prepare_tweet_gender():
     save_json(output, NAME)
 
 def prepare_npt_conferences():
-    """
-    Downloads and formats a dataset of statements from NPT conferences.
-    """
+    """Downloads and formats a dataset of statements from NPT conferences."""
 
     NAME = 'npt_conferences'
     TYPE = 'correlation'
@@ -734,9 +690,7 @@ def prepare_npt_conferences():
     save_json(output, NAME)
 
 def prepare_twitter_rumors():
-    """
-    Downloads and prepares a dataset of Twitter rumors.
-    """
+    """Downloads and prepares a dataset of Twitter rumors."""
 
     NAME = 'tweet_rumor'
     TYPE = 'correlation'
@@ -750,9 +704,7 @@ def prepare_twitter_rumors():
     save_json(output, NAME)
 
 def prepare_armenian_jobs():
-    """
-    Downloads and engineers features for dataset of Armenian job postings.
-    """
+    """Downloads and engineers features for dataset of Armenian job postings."""
 
     NAME = 'armenian_jobs'
     TYPE = 'correlation'
@@ -802,9 +754,7 @@ def prepare_armenian_jobs():
     save_json(output, NAME)
 
 def prepare_monster_jobs():
-    """
-    Downloads and engineers features for dataset of job postings on Monster.com.
-    """
+    """Downloads and engineers features for dataset of job postings on Monster.com."""
 
     NAME = 'monster_jobs'
     TYPE = 'correlation'
@@ -847,9 +797,7 @@ def prepare_monster_jobs():
 
 
 def prepare_dice_jobs():
-    """
-    Downloads and engineers features for dataset of job postings on dice.com.
-    """
+    """Downloads and engineers features for dataset of job postings on dice.com."""
 
     NAME = 'dice_jobs'
     TYPE = 'correlation'
@@ -899,9 +847,7 @@ def prepare_admin_statements():
     save_json(output, NAME)
 
 def prepare_suicide_notes():
-    """
-    Download and formats dataset of Reddit posts about suicide and depression.
-    """
+    """Download and formats dataset of Reddit posts about suicide and depression."""
 
     NAME = 'suicide_notes'
     TYPE = 'correlation'
@@ -923,9 +869,7 @@ def prepare_suicide_notes():
     save_json(output, NAME)
 
 def prepare_reddit_stress():
-    """
-    Downloads and formats subsample of the Dreaddit dataset.
-    """
+    """Downloads and formats subsample of the Dreaddit dataset."""
     
     NAME = 'reddit_stress'
     TYPE = 'correlation'
@@ -948,9 +892,7 @@ def prepare_reddit_stress():
     save_json(output, NAME)
 
 def prepare_drug_experiences():
-    """
-    Downloads and formats self-reported drug expeirences from Erowid.com.
-    """
+    """Downloads and formats self-reported drug expeirences from Erowid.com."""
 
     NAME = 'drug_experiences'
     TYPE = 'correlation'
@@ -981,9 +923,7 @@ def prepare_drug_experiences():
     save_json(output, NAME)
 
 def prepare_oral_histories():
-    """
-    Downloads and formats transcribed oral histories.
-    """
+    """Downloads and formats transcribed oral histories."""
     
     NAME = 'oral_histories'
     TYPE = 'correlation'
@@ -1030,7 +970,63 @@ def prepare_oral_histories():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
+def prepare_fomc_speeches():
+    """Downloads and formats FOMC speeches annotated with economic indicators."""
+    
+    NAME = 'fomc_speeches'
+    TYPE = 'correlation'
+    DESC = 'Dataset is composed of FOMC speeches from 1996-2020'
 
+    df = pd.read_csv(f'{MANUAL_FOLDER}/fed_speeches_1996_2020.csv')
+    df = df.dropna()
+    df['year_month'] = df['date'].astype(int).astype(str).str[:6]
+    indicators_df = pd.read_csv(f'{MANUAL_FOLDER}/macro_indicators.csv')
+
+    indicators_df['year_month'] = indicators_df.Date.astype(str).str[:6]
+    df = df.merge(indicators_df, on='year_month', how='left')
+    bins = 5
+    df['unemp_cuts'] = pd.qcut(df['unemployment'], q=bins, labels=range(bins))
+    df['growth_cuts'] = pd.qcut(df['growth rate'], q=bins, labels=range(bins))
+    df['ir_cuts'] = pd.qcut(df['fed interest rate'], q=bins, labels=range(bins))
+
+    data = {
+        'greenspan_speeches':df[df.speaker == 'Chairman Alan Greenspan'].text.str.strip().tolist(),
+        'bernanke_speeches':df[df.speaker == 'Chairman Ben S. Bernanke'].text.str.strip().tolist(),
+        'greenspan_years':df[df.year_month <= '200601'].text.str.strip().tolist(),
+        'bernanke_years':df[(df.year_month >= '200602') & (df.year_month <= '201401')].text.str.strip().tolist(),
+        'yellen_years':df[(df.year_month >= '201402') & (df.year_month <= '201801')].text.str.strip().tolist(),
+        'powell_years':df[df.year_month >= '201802'].text.str.strip().tolist(),
+        'low_unemp':df[df.unemp_cuts == 0].text.str.strip().tolist(),
+        'high_unemp':df[df.unemp_cuts == bins-1].text.str.strip().tolist(),
+        'low_growth':df[df.growth_cuts == 0].text.str.strip().tolist(),
+        'high_growth':df[df.growth_cuts == bins-1].text.str.strip().tolist(),
+        'low_ir':df[df.ir_cuts == 0].text.str.strip().tolist(),
+        'high_ir':df[df.ir_cuts == bins-1].text.str.strip().tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_ad_transcripts():
+    """Downloads and formats a dataset of almost 2,000 ad scripts."""
+    
+    NAME = 'ad_transcripts'
+    TYPE = 'correlation'
+    DESC = 'Dataset is composed of nearly 2,000 ad scripts from a variety of industries.'
+
+    df = pd.read_excel(f'{MANUAL_FOLDER}/Advertisement_Transcripts_deduped_edited.xlsx')
+    top_n = 8
+    industries = df.Category.value_counts().index[:top_n].tolist()
+
+    def clean(text):
+        return text.replace('\n', ' ')
+
+    data = {}
+    for industry in industries:
+        data[industry] = df[df.Category == industry].Ad_copy.apply(clean).to_list()
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
 
 """
 ******
@@ -1050,7 +1046,7 @@ preparers = {
     'stock_news':prepare_stock_news,
     'unhealthy_conversations':prepare_unhealthy_conversations,
     'reuters_authorship':prepare_reuters_authorship,
-    'twitter_mispellings':prepare_twitter_mispellings,
+    'twitter_mispellings':prepare_twitter_misspellings,
     'reddit_humor':prepare_reddit_humor,
     'echr_decisions':prepare_echr_decisions,
     'news_popularity':prepare_news_popularity,
@@ -1059,7 +1055,7 @@ preparers = {
     'microedit_humor':prepare_microedit_humor,
     'prepare_open_review':prepare_open_review,
     'essay_scoring':prepare_essay_scoring,
-    'short_answer_grading':prepare_short_answer_scoring,
+    'short_answer_scoring':prepare_short_answer_scoring,
     'tweet_gender':prepare_tweet_gender,
     'npt_conferences':prepare_npt_conferences,
     'twitter_rumors':prepare_twitter_rumors,
@@ -1071,13 +1067,15 @@ preparers = {
     'reddit_stress':prepare_reddit_stress,
     'drug_experiences':prepare_drug_experiences,
     'oral_histories':prepare_oral_histories,
+    'fomc_speeches':prepare_fomc_speeches,
+    'ad_transcripts':prepare_ad_transcripts,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-    prepare_open_review()
+    prepare_ad_transcripts()
 
     if False:
         pbar = tqdm(preparers.items())
