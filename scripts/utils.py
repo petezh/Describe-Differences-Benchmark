@@ -7,6 +7,9 @@ import shutil
 import json
 from typing import Dict
 import os
+from html.parser import HTMLParser
+from io import StringIO
+
 import gdown
 
 from parameters import *
@@ -88,3 +91,32 @@ def clean_text(text):
     Repalces common unicode characters.
     """
     return text.encode("ascii", "ignore").decode()
+
+class MLStripper(HTMLParser):
+    """
+    Borrowed from https://stackoverflow.com/questions/753052/strip-html-from-strings-in-python.
+    """
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs= True
+        self.text = StringIO()
+    def handle_data(self, d):
+        self.text.write(d)
+    def get_data(self):
+        return self.text.getvalue()
+
+def strip_tags(html: str):
+    """
+    Borrowed from https://stackoverflow.com/questions/753052/strip-html-from-strings-in-python.
+    """
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+def encode_ascii(text):
+    """
+    Encode a text into ASCII.
+    """
+    return text.encode('ascii', 'ignore').decode('utf-8')

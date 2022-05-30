@@ -48,7 +48,8 @@ def scrape():
             metadata.append(forum_metadata)
 
     df = pd.DataFrame(metadata)
-    good_papers = df[df.average_rating >= 5].abstract.tolist()
+    great_papers = df[df.average_rating >= 7].abstract.tolist()
+    good_papers = df[(df.average_rating >= 5) & (df.average_rating < 7)].abstract.tolist()
     bad_papers = df[df.average_rating < 5].abstract.tolist()
     
-    return good_papers, bad_papers
+    return great_papers, good_papers, bad_papers

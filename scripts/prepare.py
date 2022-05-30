@@ -1,3 +1,4 @@
+import codecs
 from collections import defaultdict
 import itertools
 import json
@@ -91,7 +92,7 @@ def prepare_trial_deception():
     truth, lie = [], []
     for file in files:
         with open(file, 'r') as f:
-            contents = f.read()
+            contents = encode_ascii(f.read())
             if 'truth' in file:
                 truth.append(contents)
             else:
@@ -124,6 +125,7 @@ def prepare_rate_my_prof():
     get_gender = lambda name: d.get_gender(name)
 
     df = pd.read_csv(join(directory, 'RateMyProfessor_Sample data.csv'))
+    df['comments'] = df['comments'].apply(lambda s: codecs.unicode_escape_decode(s)[0] if isinstance(s, str) else "")
     df['first_name'] = df['professor_name'].str.split().str[0]
     df['gender'] = df['first_name'].apply(get_gender)
     df['gender'].value_counts()
@@ -135,8 +137,8 @@ def prepare_rate_my_prof():
         'male':list(map(str, df[df['gender']=='male']['comments']))
     }
 
-    data['female'] = [t for t in data['female'] if ' him ' not in t and ' his ' not in t]
-    data['male'] = [t for t in data['male'] if ' she ' not in t and ' her ' not in t]
+    data['female'] = list(filter(None, [t for t in data['female'] if ' him ' not in t and ' his ' not in t]))
+    data['male'] = list(filter(None, [t for t in data['male'] if ' she ' not in t and ' her ' not in t]))
 
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
@@ -163,7 +165,7 @@ def prepare_parenting_subreddits():
     data = {}
     for topic in topics:
         text = df[df['topics'].str.contains(topic)]['text']
-        clean_text = text.apply(lambda s: s.replace(u"\u2018", "'").replace(u"\u2019", "'"))
+        clean_text = text.apply(lambda s: codecs.unicode_escape_decode(s)[0]).apply(encode_ascii)
         data[topic] = clean_text.tolist()
 
     output = format_data(data, TYPE, DESC)
@@ -189,13 +191,16 @@ def prepare_diplomacy_deception():
     files = glob.glob(f'{directory}/*.txt')
     data = defaultdict(list)
 
+    def clean(text):
+        return encode_ascii(text).replace('\n', '')
+
     for file in files:
         df = pd.read_json(file, lines=True)
         messages = list(itertools.chain.from_iterable(pd.read_json(files[0], lines=True)['messages']))
         labels = list(itertools.chain.from_iterable(pd.read_json(files[0], lines=True)['sender_labels']))
         df = pd.DataFrame({'message':messages, 'label':labels})
-        data['truth'].extend(df[df['label']==True]['message'].apply(lambda s: s.replace(u"\u2018", "'").replace(u"\u2019", "'")).tolist())
-        data['lie'].extend(df[df['label']==False]['message'].apply(lambda s: s.replace(u"\u2018", "'").replace(u"\u2019", "'")).tolist())
+        data['truth'].extend(df[df['label']==True]['message'].apply(clean).tolist())
+        data['lie'].extend(df[df['label']==False]['message'].apply(clean).tolist())
     
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
@@ -289,6 +294,7 @@ def prepare_stock_news():
     df = pd.read_csv(join(directory, filename))
 
     data = defaultdict(list)
+
     for col in df.columns:
         if "Top" in col:
             data['down'].extend(df[df['Label'] == 0][col].tolist())
@@ -412,7 +418,7 @@ def prepare_reddit_humor():
 
     data = {}
     def process(text):
-        return text.replace('_____', ' ')
+        return encode_ascii(text.replace('_____', ' '))
     data['funny'] = df[df['funny'] == 1]['text'].apply(process).tolist()
     data['unfunny'] = df[df['funny'] == 0]['text'].apply(process).tolist()
 
@@ -432,25 +438,25 @@ def prepare_echr_decisions():
     directory = f'{DOWNLOAD_FOLDER}/{NAME}'
     download_zip(URL, directory)
     
-    path = '{directory}/*_Anon/*.json'
+    path = f'{directory}/*_Anon/*.json'
     files = glob.glob(path)
     dicts = [json.load(open(f, 'r')) for f in files]
 
     np.random.seed(0)
     data = defaultdict(list)
     for d in dicts:
-        text = '\n'.join(d['TEXT'])
+        text = list(d['TEXT'])
         if d['VIOLATED_ARTICLES']:
-            data['violation'].append(text)
+            data['violation'].extend(text)
         else:
-            data['no_violation'].append(text)
+            data['no_violation'].extend(text)
 
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
 def prepare_news_popularity():
     """
-    Downloads and formats dataset of decisions from the European Court of Human Rights (ECHR).
+    Downloads and formats dataset of news headlines and popularity.
     """
 
     NAME = 'news_popularity'
@@ -470,7 +476,7 @@ def prepare_news_popularity():
     df['Headline'] = df['Headline'].apply(clean_text)
     df['Title'] = df['Title'].apply(clean_text)
 
-    def top_bottom(group, col, n = 50):
+    def top_bottom(group, col, n = 100):
         sorted = group.sort_values(col)
         return sorted.iloc[-n:], sorted.iloc[:n]
 
@@ -510,9 +516,10 @@ def prepare_convincing_arguments():
     directory = f'{DOWNLOAD_FOLDER}/{NAME}'
     download_zip(URL, directory)
 
-    data_path = f'{directory}/data/UKPConvArg1-Ranking-CSV/*'
+    data_path = f'{directory}/acl2016-convincing-arguments-master/data/UKPConvArg1-Ranking-CSV/*'
     files = glob.glob(data_path)
     df = pd.DataFrame(columns=['id', 'rank', 'argument'])
+
     def read_file(file):
         f = open(file, 'r')
         lines = f.readlines()
@@ -520,7 +527,9 @@ def prepare_convincing_arguments():
         for line in lines[1:]:
             id, rank, argument = line.split('\t')
             data.append([id, rank, argument])
+
         return pd.DataFrame(data, columns=['id', 'rank', 'argument'])
+
     for file in files:
         df = df.append(read_file(file))
 
@@ -528,8 +537,13 @@ def prepare_convincing_arguments():
         sorted = group.sort_values(col)
         return sorted.iloc[-n:], sorted.iloc[:n]
 
+    def clean(text):
+        return strip_tags(text).replace('\n', '')
+    
+    df['argument'] = df['argument'].apply(clean)
+
     data = {}
-    unconvincing, convincing = top_bottom(df, 'rank', 500)
+    unconvincing, convincing = top_bottom(df, 'rank', 200)
     data['unconvincing'] = unconvincing['argument'].tolist()
     data['convincing'] = convincing['argument'].tolist()
 
@@ -562,8 +576,7 @@ def prepare_microedit_humor():
 
     df['edited'] = df.apply(lambda x: make_edit(x.original, x.edit), axis=1)
     df['edited'] = df['edited'].apply(clean_text)
-    df['bin'] = pd.cut(df['meanGrade'], 3, labels=range(3))
-    print(df)
+    df['bin'] = pd.cut(df['meanGrade'], 4, labels=range(4))
     
     data = {}
     for i, rank in enumerate(['unfunny', 'neutral', 'funny', 'very_funny']):
@@ -581,11 +594,12 @@ def prepare_open_review():
     DESC = 'Dataset of ICLR submissions from 2018 and 2021 split on whether they recieved an average rating greater than 5.'
 
     import scrape_open_review
-    good_papers, bad_papers = scrape_open_review.scrape()
+    great_papers, good_papers, bad_papers = scrape_open_review.scrape()
 
     data = {
-        'good_papers':good_papers,
-        'bad_papers':bad_papers
+        'great_papers':list(map(encode_ascii, great_papers)),
+        'good_papers':list(map(encode_ascii, good_papers)),
+        'bad_papers':list(map(encode_ascii, bad_papers)),
     }
     
     output = format_data(data, TYPE, DESC)
@@ -635,14 +649,14 @@ def prepare_short_answer_scoring():
     df = pd.read_csv(join(directory, filename), encoding='utf-8')
     df = df[df.EssaySet == 1]
     df['average_score'] = df[['Score1', 'Score2']].mean(axis=1)
-    good_essays = df[df.average_score >= 2.5].EssayText.tolist()
-    medium_essays = df[(1.5 <= df.average_score) & (df.average_score < 2.5)].EssayText.tolist()
-    bad_essays = df[df.average_score < 1.5].EssayText.tolist()
+    good_answers = df[df.average_score >= 2.5].EssayText.tolist()
+    medium_answers = df[(1.5 <= df.average_score) & (df.average_score < 2.5)].EssayText.tolist()
+    bad_answers = df[df.average_score < 1.5].EssayText.tolist()
 
     data = {
-        'good_essays':good_essays,
-        'medium_essays':medium_essays,
-        'bad_essays':bad_essays,
+        'good_answers':good_answers,
+        'medium_answers':medium_answers,
+        'bad_answers':bad_answers,
     }
     
     output = format_data(data, TYPE, DESC)
@@ -664,6 +678,7 @@ def prepare_tweet_gender():
 
     df = pd.read_csv(join(directory, filename), encoding='latin-1')
     df = df[df['gender:confidence'] == 1.00]
+    df['text'] = df['text'].apply(encode_ascii)
     male_tweets = df[df.gender=='male'].text.tolist()
     female_tweets = df[df.gender=='female'].text.tolist()
 
@@ -697,9 +712,17 @@ def prepare_npt_conferences():
         docs.append(doc)
 
     df = pd.DataFrame(docs)
-    pre_2008 = df[df.year < 2008].text.tolist()
-    btw_2008_2012 = df[(df.year >= 2008) & (df.year < 2012)].text.tolist()
-    post_2012 = df[df.year >= 2012].text.tolist()
+
+    def prep_list(text):
+        para_list = []
+        for t in text:
+            paras = t.replace('\t', ' ').split('\n')
+            para_list.extend([p for p in filter(None, paras) if len(p) > 50])
+        return para_list
+
+    pre_2008 = prep_list(df[df.year < 2008].text)
+    btw_2008_2012 = prep_list(df[(df.year >= 2008) & (df.year < 2012)].text)
+    post_2012 = prep_list(df[df.year >= 2012].text)
 
     data = {
         'pre_2008':pre_2008,
@@ -756,6 +779,12 @@ def prepare_armenian_jobs():
         'prgmr':'programmer',
     }
 
+    def clean(text):
+        return str(text).replace('\n', ' ')
+
+    df['JobDescription'] = df['JobDescription'].apply(clean)
+    df['JobRequirment'] = df['JobRequirment'].apply(clean)
+
     for name, title in jobs.items():
         descriptions = df[df.Title == title]['JobDescription'].dropna().tolist()
         requirements =  df[df.Title == title]['JobRequirment'].dropna().tolist()
@@ -803,6 +832,11 @@ def prepare_monster_jobs():
         'berkeley':'Berkeley, CA'
     }
 
+    def clean(text):
+        return encode_ascii(text).replace('\n', '')
+
+    df['job_description'] = df['job_description'].apply(clean)
+
     data = {}
     for name, loc in locations.items():
         descriptions = df[df.location.str.contains(loc)].job_description.dropna().tolist()
@@ -826,10 +860,16 @@ def prepare_dice_jobs():
         'northup_grumman':'NORTHROP GRUMMAN',
         'leidos':'Leidos',
         'dell':'Dell',
-        'delloite':'Delloite',
+        'deloitte':'Deloitte',
         'amazon':'Amazon',
         'jpm':'JPMorgan Chase'
     }
+
+    def clean(text):
+        return text.replace('\u00e5\u00ca', '')
+    
+    df['job_description'] = df['job_description'].apply(clean)
+
     data = {}
     for name, org in orgs.items():
         descriptions = df[df.organization == org].job_description.dropna().tolist()
@@ -854,9 +894,142 @@ def prepare_admin_statements():
     import scrape_admin_statements
 
     data = scrape_admin_statements.scrape()
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_suicide_notes():
+    """
+    Download and formats dataset of Reddit posts about suicide and depression.
+    """
+
+    NAME = 'suicide_notes'
+    TYPE = 'correlation'
+    DESC = 'Dataset is composed of posts from r/SuicideWatch and r/depression.'
+    URL = 'https://raw.githubusercontent.com/hesamuel/goodbye_world/master/data/data_for_model_2.csv'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    filename = f'{NAME}.csv'
+    download_file(URL, directory, filename)
+    
+    df = pd.read_csv(join(directory, filename))
+    df['all_text'] = df['title'] + ' ' + df['selftext']
+    data = {
+        'depression':df[df.is_suicide == 0].all_text.tolist(),
+        'suicide':df[df.is_suicide == 1].all_text.tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_reddit_stress():
+    """
+    Downloads and formats subsample of the Dreaddit dataset.
+    """
+    
+    NAME = 'reddit_stress'
+    TYPE = 'correlation'
+    DESC = 'Dataset is composed of stress-related posts on Reddit.'
+    URL = 'https://raw.githubusercontent.com/gillian850413/Insight_Stress_Analysis/master/data/dreaddit-train.csv'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    filename = f'{NAME}.csv'
+    download_file(URL, directory, filename)
+    
+    df = pd.read_csv(join(directory, filename), encoding='latin-1')
+
+    data = {
+    'ptsd':df[df.subreddit == 'ptsd'].text.tolist(),
+    'anxiety':df[df.subreddit == 'anxiety'].text.tolist(),
+    'stress':df[df.subreddit == 'stress'].text.tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_drug_experiences():
+    """
+    Downloads and formats self-reported drug expeirences from Erowid.com.
+    """
+
+    NAME = 'drug_experiences'
+    TYPE = 'correlation'
+    DESC = 'Dataset comprises self-reports of various drugs scraped from Erowid.com.'
+    URL = 'https://github.com/technillogue/erowid-w2v/archive/master.zip'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    download_zip(URL, directory)
+
+    DRUGS = ['cocaine', 'dxm', 'lsd', 'mdma', 'mushrooms', 'oxycodone', 'salvia', 'tobacco']
+
+    data = {}
+
+    for drug in DRUGS:
+        
+        files = glob.glob(join(directory, f'erowid-w2v-master/core-experiences/{drug}/*'))
+        experiences = []
+
+        for file in files:
+            with open(file, 'r') as f:
+                text = "".join(f.readlines())
+                text = strip_tags(text).replace('\r', '').split('\n')
+                experiences.extend([p for p in filter(None, text) if len(p) > 50])
+        
+        data[drug] = experiences
     
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
+
+def prepare_oral_histories():
+    """
+    Downloads and formats transcribed oral histories.
+    """
+    
+    NAME = 'oral_histories'
+    TYPE = 'correlation'
+    DESC = 'Dataset is composed of oral histories transcribed by OHTAP'
+    URL = 'https://raw.githubusercontent.com/ohtap/ohtap/master/Research%20Question%202/updated_0510.csv'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    filename = f'{NAME}.csv'
+    download_file(URL, directory, filename)
+    
+    df = pd.read_csv(join(directory, filename), sep='\t')
+    southern_states = """MD
+    DE
+    VA
+    WV
+    KY
+    TN
+    NC
+    SC
+    FL
+    GA
+    AL
+    MS
+    LA
+    AK
+    TX
+    OK""".split('\n')
+
+    df['corrected_text'] = df['corrected_text'].apply(encode_ascii)
+
+    data = {
+        'pre_1930':df[df.birth_year < 1930].corrected_text.to_list(),
+        '1930-50':df[(df.birth_year >= 1930) & (df.birth_year < 1950)].corrected_text.to_list(),
+        'post_1950':df[df.birth_year > 1950].corrected_text.to_list(),
+        'black':df[df.race == 'Black or African American'].corrected_text.to_list(),
+        'white':df[df.race == 'White'].corrected_text.to_list(),
+        'asian':df[df.race == 'Asian'].corrected_text.to_list(),
+        'college_educated':df[df.education.isin(['Graduate or professional degree', 'Bachelor\'s degree'])].corrected_text.to_list(),
+        'not_college_educated':df[~df.education.isin(['Graduate or professional degree', 'Bachelor\'s degree'])].corrected_text.to_list(),
+        'south':df[df.interviewee_birth_state.isin(southern_states)].corrected_text.to_list(),
+        'not_south':df[~df.interviewee_birth_state.isin(southern_states)].corrected_text.to_list(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
 
 
 """
@@ -885,7 +1058,7 @@ preparers = {
     'rate_my_prof':prepare_rate_my_prof,
     'microedit_humor':prepare_microedit_humor,
     'prepare_open_review':prepare_open_review,
-    'essay_grading':prepare_essay_scoring,
+    'essay_scoring':prepare_essay_scoring,
     'short_answer_grading':prepare_short_answer_scoring,
     'tweet_gender':prepare_tweet_gender,
     'npt_conferences':prepare_npt_conferences,
@@ -894,11 +1067,17 @@ preparers = {
     'monster_jobs':prepare_monster_jobs,
     'dice_jobs':prepare_dice_jobs,
     'admin_statements':prepare_admin_statements,
+    'suicide_notes':prepare_suicide_notes,
+    'reddit_stress':prepare_reddit_stress,
+    'drug_experiences':prepare_drug_experiences,
+    'oral_histories':prepare_oral_histories,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+    prepare_open_review()
 
     if False:
         pbar = tqdm(preparers.items())

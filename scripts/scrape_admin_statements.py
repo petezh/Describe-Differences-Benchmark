@@ -27,7 +27,10 @@ def scrape():
                 with pdfplumber.open(file) as pdf:
                     for page in pdf.pages:
                         text += page.extract_text() + " "
-                statements.append(text)
+                
+                if (loc := text.find("The Administration")) != 0:
+                    text = text[loc:].replace('\n','')
+                    statements.append(text)
             except:
                 pass
 

@@ -1,5 +1,6 @@
 import tweepy
 import pandas as pd
+from utils import encode_ascii
 
 CONSUMER_KEY = "jemyT8R4iNSnxfTzQle3yhKoR"
 CONSUMER_SECRET = "I0UbgO3A3hRIyGiuwZqewwwKJ0wGTd6at3DN7UB8qJkjbD7518"
@@ -31,7 +32,7 @@ def scrape():
         'zuckerberg_yatch':'https://zenodo.org/record/2563864/files/DATASET_R3.xlsx',
         'denzel_washington':'https://zenodo.org/record/2563864/files/DATASET_R4.xlsx',
         'veggietales':'https://zenodo.org/record/2563864/files/DATASET_R7.xlsx',
-        'michael_jordan':'https://zenodo.org/record/2563864/files/DATASET_R2.xlsx',
+        'michael_jordan':'https://zenodo.org/record/2563864/files/DATASET_R8.xlsx',
     }
 
     data = {}
@@ -47,6 +48,6 @@ def scrape():
         df['stage'] = pd.qcut(df['dt'], 3, labels=STAGES)
 
         for stage in STAGES:
-            data[f'{rumor}_{stage}'] = df[df.stage == stage]['text'].tolist()
+            data[f'{rumor}_{stage}'] = df[df.stage == stage]['text'].apply(encode_ascii).tolist()
     
     return data
