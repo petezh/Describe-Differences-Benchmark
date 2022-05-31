@@ -367,6 +367,26 @@ def pair_monster_jobs_sf_nyc():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
+def pair_movie_popularity_hit_average():
+    """Hit movies versus average movies"""
+
+    DATASET = 'movie_popularity'
+    POS = ['hit']
+    NEG = ['average']
+    ANNOTATIONS = ['mentions a superhero','talks more about surprise']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_movie_popularity_bad_average():
+    """Bad movies versus average movies"""
+
+    DATASET = 'movie_popularity'
+    POS = ['bad']
+    NEG = ['average']
+    ANNOTATIONS = ['is a documentary','is a remake']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
 def pair_news_popularity_economy_pop_unpop():
     """Popular vs. unpoplar Bloomberg news related to the economy, measured by Facebook engagement."""
 
@@ -688,7 +708,7 @@ def pair_times_india_headlines_2019_2020():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def trial_deception_truth_lie():
+def pair_trial_deception_truth_lie():
     """Truths and lies told during real life trials."""
 
     DATASET = 'trial_deception'
@@ -698,7 +718,7 @@ def trial_deception_truth_lie():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def tweet_gender_male_female():
+def pair_tweet_gender_male_female():
     """Tweets from male versus female Twitter users."""
 
     DATASET = 'tweet_gender'
@@ -708,7 +728,7 @@ def tweet_gender_male_female():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def tweet_rumor_redhawks_early_late():
+def pair_tweet_rumor_redhawks_early_late():
     """Early and late Twitter rumors about the 'Redhawks' name change."""
 
     DATASET = 'tweet_rumor'
@@ -718,7 +738,7 @@ def tweet_rumor_redhawks_early_late():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def tweet_rumor_zucc_early_late():
+def pair_tweet_rumor_zucc_early_late():
     """Early and late Twitter rumors about Zuckerberg buying a yatch."""
 
     DATASET = 'tweet_rumor'
@@ -728,7 +748,7 @@ def tweet_rumor_zucc_early_late():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def tweet_rumor_denzel_wash_early_late():
+def pair_tweet_rumor_denzel_wash_early_late():
     """Early and late Twitter rumors about Denzel Washington praising Trump."""
 
     DATASET = 'tweet_rumor'
@@ -738,7 +758,7 @@ def tweet_rumor_denzel_wash_early_late():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def tweet_rumor_veggietales_early_late():
+def pair_tweet_rumor_veggietales_early_late():
     """Early and late Twitter rumors about a new Veggietales cannabis character."""
 
     DATASET = 'tweet_rumor'
@@ -748,7 +768,7 @@ def tweet_rumor_veggietales_early_late():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def twitter_misspellings_your_ur():
+def pair_twitter_misspellings_your_ur():
     """Tweets with and without an abbreviation of 'your' to 'ur'"""
 
     DATASET = 'twitter_misspellings'
@@ -758,7 +778,7 @@ def twitter_misspellings_your_ur():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def twitter_misspellings_with_wit():
+def pair_twitter_misspellings_with_wit():
     """Tweets with and without an abbreviation of 'with' to 'wit'"""
 
     DATASET = 'twitter_misspellings'
@@ -768,7 +788,7 @@ def twitter_misspellings_with_wit():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def twitter_misspellings_that_dat():
+def pair_twitter_misspellings_that_dat():
     """Tweets with and without an abbreviation of 'that' to 'dat'"""
 
     DATASET = 'twitter_misspellings'
@@ -778,7 +798,7 @@ def twitter_misspellings_that_dat():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def twitter_misspellings_going_goin():
+def pair_twitter_misspellings_going_goin():
     """Tweets with and without an abbreviation of 'going' to 'goin'"""
 
     DATASET = 'twitter_misspellings'
@@ -788,7 +808,7 @@ def twitter_misspellings_going_goin():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def unhealthy_conversations_dismissive_condescending():
+def pair_unhealthy_conversations_dismissive_condescending():
     """Unhealthy conversations characterized as dismissive vs. condescending."""
 
     DATASET = 'unhealthy_conversations'
@@ -798,7 +818,7 @@ def unhealthy_conversations_dismissive_condescending():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def unhealthy_conversations_generalisation_unfair():
+def pair_unhealthy_conversations_generalisation_unfair():
     """Unhealthy conversations characterized as generalisation (not unfair) vs. generalisation unfair."""
 
     DATASET = 'unhealthy_conversations'
@@ -808,13 +828,53 @@ def unhealthy_conversations_generalisation_unfair():
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
-def unhealthy_conversations_hostile_antagonize():
+def pair_unhealthy_conversations_hostile_antagonize():
     """Unhealthy conversations characterized as hostlie vs. antagonizing."""
 
     DATASET = 'unhealthy_conversations'
     POS = ['hostile']
     NEG = ['antagonize']
     ANNOTATIONS = ['is less insulting','uses more curse words']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_yc_startups_exited_operating():
+    """YC startups that either exited or are still operating."""
+
+    DATASET = 'yc_startups'
+    POS = ['exited']
+    NEG = ['operating']
+    ANNOTATIONS = ['describes a tech company','talks about specific services']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_yc_startups_dead_operating():
+    """YC startups that either dead or are still operating."""
+
+    DATASET = 'yc_startups'
+    POS = ['dead']
+    NEG = ['operating']
+    ANNOTATIONS = ['describes less innovative companies']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_yc_startups_bay_area():
+    """YC startups that either are or aren't in the Bay Area."""
+
+    DATASET = 'yc_startups'
+    POS = ['bay_area']
+    NEG = ['not_bay_area']
+    ANNOTATIONS = ['describes a tech company','talks about machine learning']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_yc_startups_pre_post_2013():
+    """YC startups between 2005-2012 and 2013-2014."""
+
+    DATASET = 'yc_startups'
+    POS = ['post_2013']
+    NEG = ['pre_2013']
+    ANNOTATIONS = ['describes a tech company','talks about machine learning']
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
@@ -853,6 +913,8 @@ constructors = [
     pair_monster_jobs_atl_tampa,
     pair_monster_jobs_ca_tx,
     pair_monster_jobs_sf_nyc,
+    pair_movie_popularity_hit_average,
+    pair_movie_popularity_bad_average,
     pair_news_popularity_economy_pop_unpop,
     pair_news_popularity_microsoft_pop_unpop,
     pair_news_popularity_obama_pop_unpop,
@@ -885,19 +947,23 @@ constructors = [
     pair_times_india_headlines_2003_2004,
     pair_times_india_headlines_2007_2008,
     pair_times_india_headlines_2019_2020,
-    trial_deception_truth_lie,
-    tweet_gender_male_female,
-    tweet_rumor_redhawks_early_late,
-    tweet_rumor_zucc_early_late,
-    tweet_rumor_denzel_wash_early_late,
-    tweet_rumor_veggietales_early_late,
-    twitter_misspellings_your_ur,
-    twitter_misspellings_with_wit,
-    twitter_misspellings_that_dat,
-    twitter_misspellings_going_goin,
-    unhealthy_conversations_dismissive_condescending,
-    unhealthy_conversations_generalisation_unfair,
-    unhealthy_conversations_hostile_antagonize,
+    pair_trial_deception_truth_lie,
+    pair_tweet_gender_male_female,
+    pair_tweet_rumor_redhawks_early_late,
+    pair_tweet_rumor_zucc_early_late,
+    pair_tweet_rumor_denzel_wash_early_late,
+    pair_tweet_rumor_veggietales_early_late,
+    pair_twitter_misspellings_your_ur,
+    pair_twitter_misspellings_with_wit,
+    pair_twitter_misspellings_that_dat,
+    pair_twitter_misspellings_going_goin,
+    pair_unhealthy_conversations_dismissive_condescending,
+    pair_unhealthy_conversations_generalisation_unfair,
+    pair_unhealthy_conversations_hostile_antagonize,
+    pair_yc_startups_exited_operating,
+    pair_yc_startups_dead_operating,
+    pair_yc_startups_bay_area,
+    pair_yc_startups_pre_post_2013,
 ]
 
 def main():

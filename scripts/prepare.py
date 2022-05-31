@@ -655,7 +655,7 @@ def prepare_npt_conferences():
     TYPE = 'correlation'
     DESC = 'Dataset of NPT conference transcripts across time.'
 
-    files = glob.glob(f'{MANUAL_FOLDER}/BarnumLoNPTReplication/data/docs_by_committee/**/*.txt')
+    files = glob.glob(f'{MANUAL_FOLDER}/{NAME}/BarnumLoNPTReplication/data/docs_by_committee/**/*.txt')
     docs = []
     for file in files:
         year = re.findall('\d\d\d\d', file)[0]
@@ -760,7 +760,7 @@ def prepare_monster_jobs():
     TYPE = 'correlation'
     DESC = 'Dataset of job postings on monster.com by geography.'
 
-    df = pd.read_csv(join(MANUAL_FOLDER, 'monster_com-job_sample.csv'))
+    df = pd.read_csv(join(MANUAL_FOLDER, NAME, 'monster_com-job_sample.csv'))
     
     locations = {
         'dallas':'Dallas, TX',
@@ -803,7 +803,7 @@ def prepare_dice_jobs():
     TYPE = 'correlation'
     DESC = 'Dataset of job postings on dice.com grouped by leading employers.'
 
-    df = pd.read_csv(join(MANUAL_FOLDER, 'Dice_US_jobs.csv'), encoding='latin-1')
+    df = pd.read_csv(join(MANUAL_FOLDER, NAME, 'Dice_US_jobs.csv'), encoding='latin-1')
     orgs = {
         'northup_grumman':'NORTHROP GRUMMAN',
         'leidos':'Leidos',
@@ -977,10 +977,10 @@ def prepare_fomc_speeches():
     TYPE = 'correlation'
     DESC = 'Dataset is composed of FOMC speeches from 1996-2020'
 
-    df = pd.read_csv(f'{MANUAL_FOLDER}/fed_speeches_1996_2020.csv')
+    df = pd.read_csv(f'{MANUAL_FOLDER}/{NAME}/fed_speeches_1996_2020.csv')
     df = df.dropna()
     df['year_month'] = df['date'].astype(int).astype(str).str[:6]
-    indicators_df = pd.read_csv(f'{MANUAL_FOLDER}/macro_indicators.csv')
+    indicators_df = pd.read_csv(f'{MANUAL_FOLDER}/{NAME}/macro_indicators.csv')
 
     indicators_df['year_month'] = indicators_df.Date.astype(str).str[:6]
     df = df.merge(indicators_df, on='year_month', how='left')
@@ -1014,7 +1014,7 @@ def prepare_ad_transcripts():
     TYPE = 'correlation'
     DESC = 'Dataset is composed of nearly 2,000 ad scripts from a variety of industries.'
 
-    df = pd.read_excel(f'{MANUAL_FOLDER}/Advertisement_Transcripts_deduped_edited.xlsx')
+    df = pd.read_excel(join(MANUAL_FOLDER, NAME, 'Advertisement_Transcripts_deduped_edited.xlsx'))
     top_n = 8
     industries = df.Category.value_counts().index[:top_n].tolist()
 
@@ -1025,6 +1025,73 @@ def prepare_ad_transcripts():
     for industry in industries:
         data[industry] = df[df.Category == industry].Ad_copy.apply(clean).to_list()
 
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_movie_popularity():
+    """Downloads and formats a dataset of movie summaries and popularity."""
+
+    NAME = 'movie_popularity'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes over 7000 movie plot summaries and popularity scores.'
+
+    files = ['train.csv', 'test.csv']
+    
+    df = pd.DataFrame()
+    for file in files:
+        df = df.append(pd.read_csv(join(MANUAL_FOLDER, NAME, 'train.csv')))
+
+    df = df[df.original_language == 'en']
+    bins = 10
+    df['pop_bin'] = pd.qcut(df['popularity'], q=bins, labels=range(bins))
+
+    data = {
+        'hit':df[df.pop_bin == 9].overview.to_list(),
+        'average':df[df.pop_bin == 7].overview.to_list(),
+        'bad':df[df.pop_bin == 3].overview.to_list(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_yc_startups():
+    """Downloads and formats a dataset of labeled YC startups"""
+
+    NAME = 'yc_startups'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes 688 YC companies that were a part of the program between 2005 and 2014.'
+    URL = 'https://raw.githubusercontent.com/ali-ce/datasets/master/Y-Combinator/Startups.csv'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    filename = f'startups.csv'
+    download_file(URL, directory, filename)
+
+    df = pd.read_csv(join(directory, filename))
+    bay_area = ['San Francisco','Mountain View','Palo Alto','Sunnyvale','Menlo Park','San Jose','Berkeley','Burlingame','Redwood City','Santa Clara']
+    data = {
+        'operating':df[df.Satus=='Operating'].Description.tolist(),
+        'exited':df[df.Satus=='Exited'].Description.tolist(),
+        'dead':df[df.Satus=='Dead'].Description.tolist(),
+        'bay_area':df[df['Headquarters (City)'].isin(bay_area)].Description.tolist(),
+        'not_bay_area':df[~df['Headquarters (City)'].isin(bay_area)].Description.tolist(),
+        'post_2013':df[df['Y Combinator Year'] >= 2013].Description.tolist(),
+        'pre_2013':df[df['Y Combinator Year'] < 2013].Description.tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_blm_countermovements():
+    """Downloads and formats a dataset of labeled YC startups"""
+
+    NAME = 'blm_countermovements'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes Tweets from All Lives Matter, Blue Lives Matter, and White Lives Matter movements.'
+
+    import scrape_blm_countermovements
+
+    data = scrape_blm_countermovements.scrape()
+    
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
@@ -1069,13 +1136,15 @@ preparers = {
     'oral_histories':prepare_oral_histories,
     'fomc_speeches':prepare_fomc_speeches,
     'ad_transcripts':prepare_ad_transcripts,
+    'movie_popularity':prepare_movie_popularity,
+    'prepare_blm_countermovements':prepare_blm_countermovements,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-    prepare_ad_transcripts()
+    prepare_blm_countermovements()
 
     if False:
         pbar = tqdm(preparers.items())
