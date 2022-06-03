@@ -1082,7 +1082,7 @@ def prepare_yc_startups():
     save_json(output, NAME)
 
 def prepare_blm_countermovements():
-    """Downloads and formats a dataset of labeled YC startups"""
+    """Downloads and formats a dataset of NLm countermovements"""
 
     NAME = 'blm_countermovements'
     TYPE = 'correlation'
@@ -1092,6 +1092,81 @@ def prepare_blm_countermovements():
 
     data = scrape_blm_countermovements.scrape()
     
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_twitter_bots():
+    """Reads and processes a dataset of known Twitter bots"""
+
+    NAME = 'twitter_bots'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes tweets from known bots and likely humans..'
+
+    from guess_language import guess_language
+
+    df_tfp = pd.read_csv(join(MANUAL_FOLDER, NAME, 'TFP.csv/tweets.csv'), encoding='latin-1')
+    df_tfp['fake'] = False
+    df_twt = pd.read_csv(join(MANUAL_FOLDER, NAME, 'TWT.csv/tweets.csv'), encoding='latin-1')
+    df_twt['fake'] = True
+    df = df_tfp.append(df_twt)
+    exclude_words = ['fake', 'bot']
+    for word in exclude_words:
+        df = df[~df['text'].str.lower().str.contains(word).astype(bool)]
+    df['language'] = df.text.apply(guess_language)
+
+    df=df[df.language == 'en']
+    data = {
+        'bot':df[df.fake].sample(20000, random_state=0).text.apply(encode_ascii).tolist(),
+        'human':df[~df.fake].sample(20000, random_state=0).text.apply(encode_ascii).tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
+def prepare_new_twitter_bots():
+    """Reads and processes a dataset of known Twitter bots"""
+
+    NAME = 'twitter_bots'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes tweets from known bots and likely humans..'
+
+    from guess_language import guess_language
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    download_zip('https://botometer.osome.iu.edu/bot-repository/datasets/cresci-2017/cresci-2017.csv.zip', directory)
+
+    trad_bot_path = join(directory, 'datasets_full.csv', 'traditional_spambots_1.csv.zip')
+    social_bot_path = join(directory, 'datasets_full.csv', 'social_spambots_2.csv.zip')
+    human_path = join(directory, 'datasets_full.csv', 'genuine_accounts.csv.zip')
+
+    extract_zip(trad_bot_path, directory)
+    extract_zip(social_bot_path, directory)
+    extract_zip(human_path, directory)
+
+    df_trad_bot = pd.read_csv(join(directory, 'traditional_spambots_1.csv', 'tweets.csv'), encoding='latin-1', nrows=50000)
+    df_trad_bot['type'] = 'trad_bot'
+    df_social_bot = pd.read_csv(join(directory, 'social_spambots_2.csv', 'tweets.csv'), encoding='latin-1', nrows=50000)
+    df_social_bot['type'] = 'social_bot'
+    df_human = pd.read_csv(join(directory, 'genuine_accounts.csv', 'tweets.csv'), encoding='latin-1', nrows=50000)
+    df_human['type'] = 'human'
+
+    df = pd.concat([df_trad_bot, df_social_bot, df_human])
+    exclude_words = ['fake', 'bot']
+    for word in exclude_words:
+        df = df[~df['text'].str.lower().str.contains(word).astype(bool)]
+    df['language'] = df.text.apply(guess_language)
+
+    df=df[df.language == 'en']
+
+    def clean(text):
+        return encode_ascii(codecs.unicode_escape_decode(text)[0])
+
+    data = {
+        'trad_bot':df[df.type == 'trad_bot'].sample(20000, random_state=0).text.apply(clean).tolist(),
+        'social_bot':df[df.type == 'social_bot'].sample(20000, random_state=0).text.apply(clean).tolist(),
+        'human':df[df.type == 'human'].sample(20000, random_state=0).text.apply(clean).tolist(),
+    }
+
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
@@ -1120,7 +1195,7 @@ preparers = {
     'convincing_arguments':prepare_convincing_arguments,
     'rate_my_prof':prepare_rate_my_prof,
     'microedit_humor':prepare_microedit_humor,
-    'prepare_open_review':prepare_open_review,
+    'open_review':prepare_open_review,
     'essay_scoring':prepare_essay_scoring,
     'short_answer_scoring':prepare_short_answer_scoring,
     'tweet_gender':prepare_tweet_gender,
@@ -1137,14 +1212,15 @@ preparers = {
     'fomc_speeches':prepare_fomc_speeches,
     'ad_transcripts':prepare_ad_transcripts,
     'movie_popularity':prepare_movie_popularity,
-    'prepare_blm_countermovements':prepare_blm_countermovements,
+    'blm_countermovements':prepare_blm_countermovements,
+    'twitter_bots':prepare_twitter_bots,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-    prepare_blm_countermovements()
+    prepare_new_twitter_bots()
 
     if False:
         pbar = tqdm(preparers.items())

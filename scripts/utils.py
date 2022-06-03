@@ -1,5 +1,5 @@
 import requests
-import zipfile
+from zipfile import ZipFile
 from io import BytesIO
 import tarfile
 from os.path import join
@@ -26,8 +26,13 @@ def download_zip(url: str, directory: str):
     """
 
     req = requests.get(url)
-    zip = zipfile.ZipFile(BytesIO(req.content))
+    zip = ZipFile(BytesIO(req.content))
     zip.extractall(directory)
+
+def extract_zip(path: str, directory: str):
+
+    with ZipFile(path, 'r') as zip:
+        zip.extractall(directory)
 
 def download_tar(url: str, directory: str):
     """
