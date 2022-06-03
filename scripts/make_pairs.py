@@ -882,9 +882,19 @@ def pair_twitter_bots_human():
     """Tweets from bots vs. humans."""
 
     DATASET = 'twitter_bots'
-    POS = ['bot']
+    POS = ['trad_bot']
     NEG = ['human']
     ANNOTATIONS = ['talks about sexual topics','discusses politics','is negative']
+
+    return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
+
+def pair_twitter_bots_trad_social():
+    """Tweets from traditional bots vs. new social bots."""
+
+    DATASET = 'twitter_bots'
+    POS = ['social_bot']
+    NEG = ['trad_bot']
+    ANNOTATIONS = ['talks about other people']
 
     return generate_pair(DATASET, POS, NEG, ANNOTATIONS)
 
@@ -976,6 +986,7 @@ constructors = [
     pair_yc_startups_bay_area,
     pair_yc_startups_pre_post_2013,
     pair_twitter_bots_human,
+    pair_twitter_bots_trad_social,
 ]
 
 def main():

@@ -1104,34 +1104,6 @@ def prepare_twitter_bots():
 
     from guess_language import guess_language
 
-    df_tfp = pd.read_csv(join(MANUAL_FOLDER, NAME, 'TFP.csv/tweets.csv'), encoding='latin-1')
-    df_tfp['fake'] = False
-    df_twt = pd.read_csv(join(MANUAL_FOLDER, NAME, 'TWT.csv/tweets.csv'), encoding='latin-1')
-    df_twt['fake'] = True
-    df = df_tfp.append(df_twt)
-    exclude_words = ['fake', 'bot']
-    for word in exclude_words:
-        df = df[~df['text'].str.lower().str.contains(word).astype(bool)]
-    df['language'] = df.text.apply(guess_language)
-
-    df=df[df.language == 'en']
-    data = {
-        'bot':df[df.fake].sample(20000, random_state=0).text.apply(encode_ascii).tolist(),
-        'human':df[~df.fake].sample(20000, random_state=0).text.apply(encode_ascii).tolist(),
-    }
-
-    output = format_data(data, TYPE, DESC)
-    save_json(output, NAME)
-
-def prepare_new_twitter_bots():
-    """Reads and processes a dataset of known Twitter bots"""
-
-    NAME = 'twitter_bots'
-    TYPE = 'correlation'
-    DESC = 'Dataset includes tweets from known bots and likely humans..'
-
-    from guess_language import guess_language
-
     directory = f'{DOWNLOAD_FOLDER}/{NAME}'
     download_zip('https://botometer.osome.iu.edu/bot-repository/datasets/cresci-2017/cresci-2017.csv.zip', directory)
 
@@ -1219,8 +1191,6 @@ preparers = {
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-    prepare_new_twitter_bots()
 
     if False:
         pbar = tqdm(preparers.items())
