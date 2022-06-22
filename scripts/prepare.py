@@ -1142,6 +1142,57 @@ def prepare_twitter_bots():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
+def prepare_happy_moments():
+    """Reads and processes a collection of happy moments."""
+
+    NAME = 'happy_moments'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes self-reported happy moments and demographic characteristics.'
+    
+    URL = 'https://raw.githubusercontent.com/megagonlabs/HappyDB/master/happydb/data/cleaned_hm.csv'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+    
+    filename = f'happy_moments.csv'
+    download_file(URL, directory, filename)
+
+    URL_DEMO = 'https://raw.githubusercontent.com/megagonlabs/HappyDB/master/happydb/data/demographic.csv'
+    demo_filename = f'demographics.csv'
+    download_file(URL_DEMO, directory, demo_filename)
+
+    df = pd.read_csv(join(directory, filename))
+    demo_df = pd.read_csv(join(directory, demo_filename))
+
+    df = df.merge(demo_df, on='wid', how='left')
+    df['age'] = pd.to_numeric(df['age'], errors='coerce')
+
+    data = {
+        'affection':df[df.ground_truth_category=='affection'].cleaned_hm.tolist(),
+        'bonding':df[df.ground_truth_category=='bonding'].cleaned_hm.tolist(),
+        'enjoy_the_moment':df[df.ground_truth_category=='enjoy_the_moment'].cleaned_hm.tolist(),
+        'leisure':df[df.ground_truth_category=='leisure'].cleaned_hm.tolist(),
+        'usa':df[df.country=='USA'].cleaned_hm.tolist(),
+        'india':df[df.country=='IND'].cleaned_hm.tolist(),
+        'venezuela':df[df.country=='VEN'].cleaned_hm.tolist(),
+        'canada':df[df.country=='CAN'].cleaned_hm.tolist(),
+        '18-21':df[df.age.between(18, 21)].cleaned_hm.tolist(),
+        '22-25':df[df.age.between(22, 25)].cleaned_hm.tolist(),
+        '26-35':df[df.age.between(26, 35)].cleaned_hm.tolist(),
+        '36-45':df[df.age.between(36, 45)].cleaned_hm.tolist(),
+        '46+':df[df.age.between(46, 100)].cleaned_hm.tolist(),
+        'male':df[df.gender == 'm'].cleaned_hm.tolist(),
+        'female':df[df.gender == 'f'].cleaned_hm.tolist(),
+        'parent':df[df.parenthood == 'y'].cleaned_hm.tolist(),
+        'not_parent':df[df.parenthood == 'n'].cleaned_hm.tolist(),
+        'single':df[df.marital == 'single'].cleaned_hm.tolist(),
+        'married':df[df.marital == 'married'].cleaned_hm.tolist(),
+        'divorced':df[df.marital == 'divorced'].cleaned_hm.tolist(),
+        'separated':df[df.marital == 'separated'].cleaned_hm.tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
 """
 ******
 Driver
@@ -1186,11 +1237,14 @@ preparers = {
     'movie_popularity':prepare_movie_popularity,
     'blm_countermovements':prepare_blm_countermovements,
     'twitter_bots':prepare_twitter_bots,
+    'happy_moments':prepare_happy_moments,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+    prepare_happy_moments()
 
     if False:
         pbar = tqdm(preparers.items())

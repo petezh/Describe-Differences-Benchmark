@@ -433,6 +433,163 @@ def pair_microedit_humor_unfunny_funny():
 
     return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
 
+def pair_happy_moments_affection_bonding():
+    """Happy moments about affection vs. bonding."""
+
+    PAIR = 'happy_moments_affection_bonding'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments about affection'
+    NEG_DESC = 'happy moments about bonding'
+    POS = ['affection']
+    NEG = ['bonding']
+    ANNOTATIONS = ['talks more about relatives', 'talk more about love']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_enjoying_leisure():
+    """Happy moments about enjoying the moment vs. leisure."""
+
+    PAIR = 'happy_moments_enjoying_leisure'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments about enjoying the moment'
+    NEG_DESC = 'happy moments about leisure'
+    POS = ['enjoy_the_moment']
+    NEG = ['leisure']
+    ANNOTATIONS = ['talks more about experiences','talks less about relaxing','does not mention vacation']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_usa_india():
+    """Happy moments from the United States vs. India."""
+
+    PAIR = 'happy_moments_usa_india'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from the United States'
+    NEG_DESC = 'happy moments from India'
+    POS = ['usa']
+    NEG = ['india']
+    ANNOTATIONS = ['talks about friends','talks about leisure','talks less about others']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_usa_venezuela():
+    """Happy moments from the United States vs. Venezuela."""
+
+    PAIR = 'happy_moments_usa_venezuela'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from the United States'
+    NEG_DESC = 'happy moments from Venezuela'
+    POS = ['usa']
+    NEG = ['venezuela']
+    ANNOTATIONS = ['talks about friends','talks about leisure','talks less about others']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_usa_canada():
+    """Happy moments from the United States vs. Canada."""
+
+    PAIR = 'happy_moments_usa_canada'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from the United States'
+    NEG_DESC = 'happy moments from Canada'
+    POS = ['usa']
+    NEG = ['canada']
+    ANNOTATIONS = ['talks about friends','talks less about nature','talks more about consumption']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_college_20s():
+    """Happy moments from 18-21 year olds versus 22-25 year olds."""
+
+    PAIR = 'happy_moments_college_20s'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from 18-21 year olds'
+    NEG_DESC = 'happy moments from 22-25 year olds'
+    POS = ['18-21']
+    NEG = ['22-25']
+    ANNOTATIONS = ['talks about traveling','talks about new places','talks about relationships']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_early_late_20s():
+    """Happy moments from 22-25 year olds versus 26-35 year olds."""
+
+    PAIR = 'happy_moments_early_late_20s'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from 22-25 year olds'
+    NEG_DESC = 'happy moments from 26-35 year olds'
+    POS = ['22-25']
+    NEG = ['26-35']
+    ANNOTATIONS = ['talks about traveling','talks about new places']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+
+def pair_happy_moments_30s_40s():
+    """Happy moments from 36-45 year olds versus 46+ year olds."""
+
+    PAIR = 'happy_moments_30s_40s'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from 36-45 year olds'
+    NEG_DESC = 'happy moments from 46+ year olds'
+    POS = ['36-45']
+    NEG = ['46+']
+    ANNOTATIONS = ['talks about children','talks more about work']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_gender():
+    """Happy moments from men and women."""
+
+    PAIR = 'happy_moments_gender'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from males'
+    NEG_DESC = 'happy moments from females'
+    POS = ['male']
+    NEG = ['female']
+    ANNOTATIONS = ['talks about work','talks about friends']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_parenthood():
+    """Happy moments from those with and without children."""
+
+    PAIR = 'happy_moments_parenthood'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from parents'
+    NEG_DESC = 'happy moments from non-parents'
+    POS = ['parent']
+    NEG = ['not_parent']
+    ANNOTATIONS = ['talks about children','talks about spouses']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_marraige():
+    """Happy moments from those who are and aren't married."""
+
+    PAIR = 'happy_moments_marraige'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from married people'
+    NEG_DESC = 'happy moments from single people'
+    POS = ['single']
+    NEG = ['married']
+    ANNOTATIONS = ['talks about dating','talks about relatives']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_happy_moments_separation_divorce():
+    """Happy moments from those who are separated vs. divorced."""
+
+    PAIR = 'happy_moments_separation_divorce'
+    DATASET = 'happy_moments'
+    POS_DESC = 'happy moments from separated people'
+    NEG_DESC = 'happy moments from divorced people'
+    POS = ['separated']
+    NEG = ['divorced']
+    ANNOTATIONS = ['talks about children','talks about relatives']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
 def pair_microedit_humor_funny_very_funny():
     """Humor generated from microedits that are funny or very funny."""
 
@@ -1007,6 +1164,32 @@ def pair_tweet_rumor_veggietales_early_late():
 
     return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
 
+def pair_twitter_bots_human():
+    """Tweets from bots vs. humans."""
+
+    PAIR = 'twitter_bots_human'
+    DATASET = 'twitter_bots'
+    POS_DESC = 'Tweets from bots'
+    NEG_DESC = 'Tweets from humans'
+    POS = ['trad_bot']
+    NEG = ['human']
+    ANNOTATIONS = ['talks about sexual topics','discusses politics','is negative']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_twitter_bots_trad_social():
+    """Tweets from traditional bots vs. new social bots."""
+
+    PAIR = 'twitter_bots_trad_social'
+    DATASET = 'twitter_bots'
+    POS_DESC = 'Tweets from traditional bots'
+    NEG_DESC = 'Tweets from bots with social networks'
+    POS = ['social_bot']
+    NEG = ['trad_bot']
+    ANNOTATIONS = ['talks about other people']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
 def pair_twitter_misspellings_your_ur():
     """Tweets with and without an abbreviation of 'your' to 'ur'"""
 
@@ -1150,33 +1333,6 @@ def pair_yc_startups_pre_post_2013():
 
     return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
 
-def pair_twitter_bots_human():
-    """Tweets from bots vs. humans."""
-
-    PAIR = 'twitter_bots_human'
-    DATASET = 'twitter_bots'
-    POS_DESC = 'Tweets from bots'
-    NEG_DESC = 'Tweets from humans'
-    POS = ['trad_bot']
-    NEG = ['human']
-    ANNOTATIONS = ['talks about sexual topics','discusses politics','is negative']
-
-    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
-
-def pair_twitter_bots_trad_social():
-    """Tweets from traditional bots vs. new social bots."""
-
-    PAIR = 'twitter_bots_trad_social'
-    DATASET = 'twitter_bots'
-    POS_DESC = 'Tweets from traditional bots'
-    NEG_DESC = 'Tweets from bots with social networks'
-    POS = ['social_bot']
-    NEG = ['trad_bot']
-    ANNOTATIONS = ['talks about other people']
-
-    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
-
-
 constructors = [
     pair_abc_headlines_2007_2008,
     pair_abc_headlines_2019_2020,
@@ -1207,6 +1363,18 @@ constructors = [
     pair_fomc_speeches_unemployment,
     pair_fomc_speeches_growth,
     pair_fomc_speeches_interest_rate,
+    pair_happy_moments_affection_bonding,
+    pair_happy_moments_enjoying_leisure,
+    pair_happy_moments_usa_india,
+    pair_happy_moments_usa_venezuela,
+    pair_happy_moments_usa_canada,
+    pair_happy_moments_college_20s,
+    pair_happy_moments_early_late_20s,
+    pair_happy_moments_30s_40s,
+    pair_happy_moments_gender,
+    pair_happy_moments_parenthood,
+    pair_happy_moments_marraige,
+    pair_happy_moments_separation_divorce,
     pair_microedit_humor_unfunny_funny,
     pair_microedit_humor_funny_very_funny,
     pair_monster_jobs_atl_tampa,
@@ -1252,6 +1420,8 @@ constructors = [
     pair_tweet_rumor_zucc_early_late,
     pair_tweet_rumor_denzel_wash_early_late,
     pair_tweet_rumor_veggietales_early_late,
+    pair_twitter_bots_human,
+    pair_twitter_bots_trad_social,
     pair_twitter_misspellings_your_ur,
     pair_twitter_misspellings_with_wit,
     pair_twitter_misspellings_that_dat,
@@ -1263,8 +1433,6 @@ constructors = [
     pair_yc_startups_dead_operating,
     pair_yc_startups_bay_area,
     pair_yc_startups_pre_post_2013,
-    pair_twitter_bots_human,
-    pair_twitter_bots_trad_social,
 ]
 
 def main():
