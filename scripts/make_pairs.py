@@ -213,6 +213,58 @@ def pair_convincing_arguments_convincing_unconvincing():
 
     return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
 
+def pair_craigslist_negotiations_success_failure():
+    """Negotiations on Craigslist that either succeeded or failed."""
+
+    PAIR = 'craigslist_negotiations_success_failure'
+    DATASET = 'craigslist_negotiations'
+    POS_DESC = 'succesful Craigslist negotiations'
+    NEG_DESC = 'unsuccessful Craigslist negotiations'
+    POS = ['success']
+    NEG = ['failure']
+    ANNOTATIONS = ['is more cordial','offers higher prices','is longer']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_craigslist_negotiations_car_price():
+    """Negotiations on Craigslist for cheap vs. expensive cars."""
+
+    PAIR = 'craigslist_negotiations_car_price'
+    DATASET = 'craigslist_negotiations'
+    POS_DESC = 'Craigslist negotiations for expensive cars'
+    NEG_DESC = 'Craigslist negotiations for cheaper cars'
+    POS = ['car_high']
+    NEG = ['car_low']
+    ANNOTATIONS = ['talks about expensive car brands','is more polite','offers higher prices']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_craigslist_negotiations_bike_price():
+    """Negotiations on Craigslist for cheap vs. expensive bikes."""
+
+    PAIR = 'craigslist_negotiations_bike_price'
+    DATASET = 'craigslist_negotiations'
+    POS_DESC = 'Craigslist negotiations for expensive bikes'
+    NEG_DESC = 'Craigslist negotiations for cheaper bikes'
+    POS = ['bike_high']
+    NEG = ['bike_low']
+    ANNOTATIONS = ['talks about mountain bikes','is more polite','offers higher prices']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_craigslist_negotiations_housing_price():
+    """Negotiations on Craigslist for cheap vs. expensive housing."""
+
+    PAIR = 'craigslist_negotiations_housing_price'
+    DATASET = 'craigslist_negotiations'
+    POS_DESC = 'Craigslist negotiations for expensive housing'
+    NEG_DESC = 'Craigslist negotiations for cheaper housing'
+    POS = ['housing_high']
+    NEG = ['housing_low']
+    ANNOTATIONS = ['is more polite','offers higher prices']
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
 def pair_dice_jobs_amazon_dell():
     """Job postings on Dice from Amazon vs. Dell."""
 
@@ -1348,6 +1400,10 @@ constructors = [
     pair_armenian_jobs_apps_pre_post_2012,
     pair_clickbait_headlines_pre_post_2013,
     pair_convincing_arguments_convincing_unconvincing,
+    pair_craigslist_negotiations_success_failure,
+    pair_craigslist_negotiations_car_price,
+    pair_craigslist_negotiations_bike_price,
+    pair_craigslist_negotiations_housing_price,
     pair_dice_jobs_amazon_dell,
     pair_dice_jobs_northup_grumman_leidos,
     pair_dice_jobs_jpm_chase_deloitte,
