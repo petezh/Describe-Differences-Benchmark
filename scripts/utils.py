@@ -72,6 +72,7 @@ def format_data(data: Dict, type: str, desc: str) -> Dict:
         'description':desc,
         'type':type,
         'data':data,
+        'note':''
     }
     return output
 

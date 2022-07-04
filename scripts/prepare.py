@@ -1193,6 +1193,48 @@ def prepare_happy_moments():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
+def prepare_craigslist_negotiations():
+    """Downloads and processes dataset of Cragslist negotiations."""
+
+    NAME = 'craigslist_negotiations'
+    TYPE = 'correlation'
+    DESC = 'Dataset includes dialogues from Craigslist negotiations.'
+
+    from datasets import load_dataset
+    df = load_dataset('craigslist_bargains', split='train').to_pandas()
+    df['failure'] = df['dialogue_acts'].apply(lambda x: x['intent'].__contains__('quit') or x['intent'].__contains__('reject'))
+    df['success'] = df['dialogue_acts'].apply(lambda x: x['intent'].__contains__('accept'))
+    df['all_text'] = df['utterance'].str.join('\n')
+
+    df['mid_price'] = df['items'].apply(lambda x: x['Price'].mean())
+    df['category'] = df['items'].apply(lambda x: x['Category'][0])
+
+
+    def split_high_low(category):
+        cat_df = df[df.category==category]
+        cat_df['half'] = pd.qcut(cat_df.mid_price, 2, labels=(0, 1))
+        bottom_text = cat_df[cat_df.half == 0].all_text
+        top_text = cat_df[cat_df.half == 1].all_text
+        return bottom_text, top_text
+
+    car_low, car_high = split_high_low('car')
+    bike_low, bike_high = split_high_low('bike')
+    housing_low, housing_high = split_high_low('housing')
+
+    data = {
+        'failure':df[df.failure]['all_text'].tolist(),
+        'success':df[df.success]['all_text'].tolist(),
+        'car_low':car_low.tolist(),
+        'car_high':car_high.tolist(),
+        'bike_low':bike_low.tolist(),
+        'bike_high':bike_high.tolist(),
+        'housing_low':housing_low.tolist(),
+        'housing_high':housing_high.tolist(),
+    }
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+
 """
 ******
 Driver
@@ -1238,13 +1280,14 @@ preparers = {
     'blm_countermovements':prepare_blm_countermovements,
     'twitter_bots':prepare_twitter_bots,
     'happy_moments':prepare_happy_moments,
+    'craigslist_negotiations':prepare_craigslist_negotiations,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-    prepare_happy_moments()
+    prepare_craigslist_negotiations()
 
     if False:
         pbar = tqdm(preparers.items())

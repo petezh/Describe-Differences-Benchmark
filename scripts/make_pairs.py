@@ -32,6 +32,7 @@ def generate_pair(
         'negative_description':neg_desc,
         'positive_samples':pos_samples,
         'negative_samples':neg_samples,
+        'notes':''
     }
 
 def describe_pair(pair):
