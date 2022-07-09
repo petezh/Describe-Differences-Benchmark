@@ -52,6 +52,15 @@ def download_file(url: str, directory: str, filename: str):
     with open(join(directory, filename), 'wb') as f:
         f.write(req.content)
 
+def download_drive_file(id: str, directory: str, filename: str):
+    """
+    Downloads files from Google Drive.
+    """
+
+    url = f'https://drive.google.com/uc?id={id}'
+    os.makedirs(directory, exist_ok=True)
+    gdown.download(url, join(directory, filename))
+    
 def download_drive_zip(id: str, directory: str):
     """
     Downloads files from Google Drive.
@@ -60,7 +69,7 @@ def download_drive_zip(id: str, directory: str):
     url = f'https://drive.google.com/uc?id={id}'
     os.makedirs(directory, exist_ok=True)
     gdown.download(url, join(directory, 'drive.zip'))
-    with zipfile.ZipFile(join(directory, 'drive.zip'), 'r') as zip_ref:
+    with ZipFile(join(directory, 'drive.zip'), 'r') as zip_ref:
         zip_ref.extractall(directory)
 
 def format_data(data: Dict, type: str, desc: str) -> Dict:

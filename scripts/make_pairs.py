@@ -774,6 +774,136 @@ def pair_news_popularity_obama_pos_neg():
 
     return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
 
+def pair_nli_benchmarks_wanli_anli_premise():
+    """Premises from WANLI and ANLI datasets."""
+
+    PAIR = 'benchmarks_wanli_mnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'WANLI dataset premises'
+    NEG_DESC = 'ANLI dataset premises'
+    POS = ['wanli_premise']
+    NEG = ['anli_r1_premise', 'anli_r2_premise', 'anli_r3_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_wanli_mnli_premise():
+    """Premises from WANLI and MNLI datasets."""
+
+    PAIR = 'benchmarks_wanli_mnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'WANLI dataset premises'
+    NEG_DESC = 'MNLI dataset premises'
+    POS = ['wanli_premise']
+    NEG = ['mnli_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_wanli_qrli_premise():
+    """Premises from WANLI and QNLI datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'WANLI dataset premises'
+    NEG_DESC = 'QNLI dataset premises'
+    POS = ['wanli_premise']
+    NEG = ['qnli_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_wanli_hans_premise():
+    """Premises from WANLI and HANS datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'WANLI dataset premises'
+    NEG_DESC = 'HANS dataset premises'
+    POS = ['wanli_premise']
+    NEG = ['hans_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r1_r2_premise():
+    """Premises from ANLI Round 1 and ANLI Round 2 datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'ANLI dataset Round 1 premises'
+    NEG_DESC = ' ANLI dataset Round 2 premises'
+    POS = ['anli_r1_premise']
+    NEG = ['anli_r2_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r2_r3_premise():
+    """Premises from ANLI Round 2 and ANLI Round 3 datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'ANLI dataset Round 2 premises'
+    NEG_DESC = ' ANLI dataset Round 3 premises'
+    POS = ['anli_r2_premise']
+    NEG = ['anli_r3_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r1_r2_hypothesis():
+    """Hypotheses from ANLI Round 1 and ANLI Round 2 datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_hypothesis'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'ANLI dataset Round 1 hypotheses'
+    NEG_DESC = ' ANLI dataset Round 2 hypotheses'
+    POS = ['anli_r1_hypothesis']
+    NEG = ['anli_r2_hypothesis']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r2_r3_hypothesis():
+    """Hypotheses from ANLI Round 2 and ANLI Round 3 datasets."""
+
+    PAIR = 'benchmarks_wanli_qnli_hypothesis'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'ANLI dataset Round 2 hypotheses'
+    NEG_DESC = ' ANLI dataset Round 3 hypotheses'
+    POS = ['anli_r2_hypothesis']
+    NEG = ['anli_r3_hypothesis']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r2_r3_hypothesis():
+    """Hypotheses from MNLI samples with matching vs. mismatching annotations."""
+
+    PAIR = 'benchmarks_wanli_qnli_hypothesis'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'MNLI dataset with mismatched annotations'
+    NEG_DESC = 'MNLI dataset with matched annotations'
+    POS = ['mnli_mismatched_hypothesis']
+    NEG = ['mnli_matched_hypothesis']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
+def pair_nli_benchmarks_anli_r2_r3_premise():
+    """Premises from MNLI samples with matching vs. mismatching annotations."""
+
+    PAIR = 'benchmarks_wanli_qnli_premise'
+    DATASET = 'nli_benchmarks'
+    POS_DESC = 'MNLI dataset with mismatched annotations'
+    NEG_DESC = 'MNLI dataset with matched annotations'
+    POS = ['mnli_mismatched_premise']
+    NEG = ['mnli_matched_premise']
+    ANNOTATIONS = []
+
+    return generate_pair(PAIR, DATASET, POS_DESC, NEG_DESC, POS, NEG, ANNOTATIONS)
+
 def pair_npt_conferences_pre_post_2008():
     """NPT conference reports from before 2008 and between 2008-2012."""
 
@@ -1443,6 +1573,16 @@ constructors = [
     pair_news_popularity_microsoft_pop_unpop,
     pair_news_popularity_obama_pop_unpop,
     pair_news_popularity_obama_pos_neg,
+    pair_nli_benchmarks_wanli_anli_premise,
+    pair_nli_benchmarks_wanli_mnli_premise,
+    pair_nli_benchmarks_wanli_qrli_premise,
+    pair_nli_benchmarks_wanli_hans_premise,
+    pair_nli_benchmarks_anli_r1_r2_premise,
+    pair_nli_benchmarks_anli_r2_r3_premise,
+    pair_nli_benchmarks_anli_r1_r2_hypothesis,
+    pair_nli_benchmarks_anli_r2_r3_hypothesis,
+    pair_nli_benchmarks_anli_r2_r3_hypothesis,
+    pair_nli_benchmarks_anli_r2_r3_premise,
     pair_npt_conferences_pre_post_2008,
     pair_npt_conferences_pre_post_2012,
     pair_open_deception_lie_truth,

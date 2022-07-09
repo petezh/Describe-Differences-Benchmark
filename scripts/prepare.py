@@ -731,22 +731,27 @@ def prepare_armenian_jobs():
         'prgmr':'programmer',
     }
 
+    from nltk import tokenize
+    NUM_SENT = 5
+
     def clean(text):
-        return str(text).replace('\n', ' ')
+        cleaned = str(text).replace('\n', ' ')
+        shortened = " ".join(tokenize.sent_tokenize(cleaned)[:NUM_SENT]).strip()
+        return shortened
 
     df['JobDescription'] = df['JobDescription'].apply(clean)
     df['JobRequirment'] = df['JobRequirment'].apply(clean)
 
     for name, title in jobs.items():
-        descriptions = df[df.Title == title]['JobDescription'].dropna().tolist()
-        requirements =  df[df.Title == title]['JobRequirment'].dropna().tolist()
+        descriptions = list(set(df[df.Title == title]['JobDescription'].dropna()))
+        requirements = list(set(df[df.Title == title]['JobRequirment'].dropna()))
         data[f'job_desc_{name}'] = descriptions
         data[f'job_req_{name}'] = requirements
 
     year_bins = [(2004, 2007), (2007, 2010), (2010, 2013), (2013, 2015)]
     for start_year, end_year in year_bins:
-        requirements = df[(start_year <= df.Year) & (df.Year < end_year)]['JobRequirment'].dropna().tolist()
-        app_process = df[(start_year <= df.Year) & (df.Year < end_year)]['ApplicationP'].dropna().tolist()
+        requirements = list(set(df[(start_year <= df.Year) & (df.Year < end_year)]['JobRequirment'].dropna()))
+        app_process = list(set(df[(start_year <= df.Year) & (df.Year < end_year)]['ApplicationP'].dropna()))
         data[f'job_req_years_{start_year}_{end_year}'] = requirements
         data[f'app_process_years_{start_year}_{end_year}'] = app_process
 
@@ -782,8 +787,13 @@ def prepare_monster_jobs():
         'berkeley':'Berkeley, CA'
     }
 
+    from nltk import tokenize
+    NUM_SENT = 5
+
     def clean(text):
-        return encode_ascii(text).replace('\n', '')
+        cleaned = encode_ascii(text).replace('\n', '')
+        shortened = " ".join(tokenize.sent_tokenize(cleaned)[:NUM_SENT]).strip()
+        return shortened
 
     df['job_description'] = df['job_description'].apply(clean)
 
@@ -813,15 +823,20 @@ def prepare_dice_jobs():
         'jpm':'JPMorgan Chase'
     }
 
+    from nltk import tokenize
+    NUM_SENT = 5
+
     def clean(text):
-        return text.replace('\u00e5\u00ca', '')
+        cleaned = text.replace('\u00e5\u00ca', '')
+        shortened = " ".join(tokenize.sent_tokenize(cleaned)[:NUM_SENT]).strip()
+        return shortened
     
     df['job_description'] = df['job_description'].apply(clean)
 
     data = {}
     for name, org in orgs.items():
         descriptions = df[df.organization == org].job_description.dropna().tolist()
-        data[name] = descriptions
+        data[name] = list(set(descriptions))
 
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
@@ -988,6 +1003,10 @@ def prepare_fomc_speeches():
     df['unemp_cuts'] = pd.qcut(df['unemployment'], q=bins, labels=range(bins))
     df['growth_cuts'] = pd.qcut(df['growth rate'], q=bins, labels=range(bins))
     df['ir_cuts'] = pd.qcut(df['fed interest rate'], q=bins, labels=range(bins))
+
+    from nltk import tokenize
+    NUM_SENT = 5
+    df['text'] = df.text.apply(lambda s: " ".join(tokenize.sent_tokenize(s)[:NUM_SENT]).strip())
 
     data = {
         'greenspan_speeches':df[df.speaker == 'Chairman Alan Greenspan'].text.str.strip().tolist(),
@@ -1235,6 +1254,51 @@ def prepare_craigslist_negotiations():
     output = format_data(data, TYPE, DESC)
     save_json(output, NAME)
 
+def prepare_nli_benchmarks():
+    """Downloads and compares leading benchmarks on natural language inference tasks."""
+
+    NAME = 'nli_benchmarks'
+    TYPE = 'correlation'
+    DESC = 'Benchmarks for natural language inference tasks.'
+
+    directory = f'{DOWNLOAD_FOLDER}/{NAME}'
+
+    IDs = {
+        'wanli':('1VGRF7Rp0CUU0bUP5Lu8PXehW2hZkHBPH','1P-_hixzcdvAopWuWcB9VjYIDGo0ncrVI'),
+        'tailor':'1-xhVxkeSNj_ROAyp-bR78ClyVioXMuxB',
+        'qnli':'1muZgdXe8CJbyLMbNovAbjUe8D8qL2uJM',
+        'nq-nil':'1s51pxVzBMr23JneWXFOPGSvk5oiO9j_C',
+        'mnli':'1G0HGU0Rovz0zf4fSDpoTf6V6unCQ3uDb',
+        'hans':'1a6uZwo0G-7aXGBCGLkkSv_FkDrBeke0a',
+        'fever-nil':'1oe2Q43uyfFMomenlX8vJZ1M8z7hO92nn',
+        'anli_r1':( '1FgB5rcydZjjlHpt637PILXsv5wwqZ1Tq','1-5wGKFGIuuRM7xJ_cibSAmr_3zAM6mb0'),
+        'anli_r2':('1CXvJtsFg9IFU8knyNLaPT_1UBvOYwOoc','1oNvNxoBMV1iKgDXCDRpkMgbghscvzgCm'),
+        'anli_r3':('1aLkhFUA-0ZN0vwi-0L9n_5XQs1CCzkpf','1drcod8uPONyvYpguOvEvJN7C2MyMFvbF'),
+        'mnli_mismatched':'1FXpfI3xTfVxXYxDjo33JVDl0zP7QvBOF',
+        'mnli_matched':'1ZeCWToJfViJbyhDnECAmrkb_0pOz_BHT',
+    }
+
+    dfs = {}
+    for name, ids in IDs.items():
+        if not isinstance(ids, tuple):
+            ids = tuple([ids])
+        df = pd.DataFrame()
+        for index, drive_id in enumerate(ids):
+            download_drive_file(drive_id, directory, f'{name}_{index}.jsonl')
+        json_paths = glob.glob(join(directory, f'{name}_*.jsonl'))
+        for json_path in json_paths:
+            df = df.append(pd.read_json(json_path, lines=True))
+        dfs[name] = df
+
+    data = {}
+    for name in IDs.keys():
+        df = dfs[name]
+        data[f'{name}_premise'] = df['premise'].tolist()
+        data[f'{name}_hypothesis'] = df['hypothesis'].tolist()
+
+    output = format_data(data, TYPE, DESC)
+    save_json(output, NAME)
+    
 """
 ******
 Driver
@@ -1281,13 +1345,16 @@ preparers = {
     'twitter_bots':prepare_twitter_bots,
     'happy_moments':prepare_happy_moments,
     'craigslist_negotiations':prepare_craigslist_negotiations,
+    'nli_benchmarks':prepare_nli_benchmarks,
 }
 
 def main():
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-    prepare_craigslist_negotiations()
+    prepare_armenian_jobs()
+    prepare_monster_jobs()
+    prepare_dice_jobs()
 
     if False:
         pbar = tqdm(preparers.items())
